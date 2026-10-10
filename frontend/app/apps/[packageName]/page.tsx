@@ -1,1 +1,0 @@
-../../../components/widgets/AppDetail/AppHeader../../../lib/api/apps../../../components/widgets/AppDetail/AppDetailView
