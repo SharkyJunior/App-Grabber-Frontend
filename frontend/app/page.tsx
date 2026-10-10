@@ -18,6 +18,45 @@ const mock: AppResult[] = [
       { name: "RuStore", status: "searching" },
     ],
   },
+  {
+    id: "uchi2",
+    name: "Учи.ру",
+    company: 'ООО "Учи.ру"',
+    package: "com.uchi.app",
+    category: "Образование",
+    rating: 4.2,
+    letter: "У",
+    stores: [
+      { name: "Google Play", status: "found" },
+      { name: "RuStore", status: "searching" },
+    ],
+  },
+  {
+    id: "uchi3",
+    name: "Учи.ру",
+    company: 'ООО "Учи.ру"',
+    package: "com.uchi.app",
+    category: "Образование",
+    rating: 4.2,
+    letter: "У",
+    stores: [
+      { name: "Google Play", status: "found" },
+      { name: "RuStore", status: "searching" },
+    ],
+  },
+  {
+    id: "uchi4",
+    name: "Учи.ру",
+    company: 'ООО "Учи.ру"',
+    package: "com.uchi.app",
+    category: "Образование",
+    rating: 4.2,
+    letter: "У",
+    stores: [
+      { name: "Google Play", status: "found" },
+      { name: "RuStore", status: "searching" },
+    ],
+  },
 ];
 
 export default function Home() {

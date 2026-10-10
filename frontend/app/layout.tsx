@@ -32,21 +32,22 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[#F3F4F1] font-sans justify-center">
-        <header className="flex flex-row align-middle sticky top-0 z-10 bg-white h-16 w-full border border-[#DCDFD8] px-16 gap-8">
-          <div className="flex flex-row gap-4 align-middle">
-            <Image
-              src="icon.svg"
-              width={32}
-              height={32}
-              alt="App Grabber Icon"
-            ></Image>
-            <p className="text-black self-center text-[20px] font-medium">
-              App Grabber
-            </p>
+        <header className="flex align-middle justify-center sticky top-0 z-10 bg-white h-16 border border-[#DCDFD8] px-16">
+          <div className="flex flex-1 gap-10 w-fit max-w-7xl px-16">
+            <div className="flex flex-row gap-4 align-middle">
+              <Image
+                src="icon.svg"
+                width={32}
+                height={32}
+                alt="App Grabber Icon"
+              ></Image>
+              <p className="text-black self-center text-[20px] font-medium">
+                App Grabber
+              </p>
+            </div>
+            <Tabs items={NAV_ITEMS} />
           </div>
-          <Tabs items={NAV_ITEMS} />
         </header>
-
         {children}
 
         <footer></footer>

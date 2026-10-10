@@ -1,14 +1,16 @@
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import type { AppResult, StoreResult } from "./types";
 
 type ResultCardProps = {
   app: AppResult;
-  onOpen?: (app: AppResult) => void;
   onCompare?: (app: AppResult) => void;
 };
 
-export function ResultCard({ app, onOpen, onCompare }: ResultCardProps) {
+export function ResultCard({ app, onCompare }: ResultCardProps) {
+  const router = useRouter();
+
   return (
     <article className="flex flex-col items-start gap-6 rounded-2xl border border-[#DCDFD8] bg-white p-6">
       <div className="flex flex-row min-w-0 flex-1 gap-5">
@@ -21,7 +23,7 @@ export function ResultCard({ app, onOpen, onCompare }: ResultCardProps) {
         >
           {app.letter}
         </div>
-        
+
         <div className="flex flex-col">
           <div className="flex flex-col">
             <h3 className="text-2xl font-bold leading-tight text-black">
@@ -46,7 +48,7 @@ export function ResultCard({ app, onOpen, onCompare }: ResultCardProps) {
 
         <div className="flex shrink-0 flex-col gap-2 sm:flex-row sm:items-center ml-4">
           <Button
-            onClick={() => onOpen?.(app)}
+            onClick={() => router.push(`/apps/${app.package}`)}
             className="self-start bg-blue-600 px-6 py-3 text-base font-bold text-white hover:bg-blue-700"
           >
             Открыть

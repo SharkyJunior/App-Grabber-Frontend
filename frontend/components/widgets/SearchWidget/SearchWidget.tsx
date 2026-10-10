@@ -1,25 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { TagSelect } from "@/components/ui/TagSelect";
-
-export type SearchWidgetProps = {
-  placeholder?: string;
-  onSearch?: (query: string) => void;
-  className?: string;
-};
+import { SearchWidgetProps } from "./types";
 
 export default function SearchWidget({
   placeholder = "com.example.app",
   onSearch,
   className,
 }: SearchWidgetProps) {
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [options, setOptions] = useState(["Google Play", "RuStore"]);
   const [selected, setSelected] = useState(["Google Play", "RuStore"]);
 
   async function handleSubmit(e: React.SubmitEvent) {
@@ -29,6 +25,7 @@ export default function SearchWidget({
     setIsLoading(true);
     try {
       console.log(query);
+      router.push(`/apps/${query}`);
       onSearch?.(query);
     } finally {
       setIsLoading(false);
@@ -55,7 +52,7 @@ export default function SearchWidget({
       <div className="flex flex-row align-middle gap-4">
         <p className="text-sm text-neutral-600 self-center">Искать в:</p>
         <TagSelect
-          options={options}
+          options={["Google Play", "RuStore"]}
           selected={selected}
           onChange={(s) => setSelected(s)}
         />
