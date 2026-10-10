@@ -2,11 +2,12 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { StoreName } from "@/stores/useSearchStore";
 
 export type TagSelectProps = {
-  options: string[];
+  options: StoreName[];
   selected: string[];
-  onChange: (selected: string[]) => void;
+  onChange: (selected: StoreName) => void;
   className?: string;
 };
 
@@ -16,14 +17,6 @@ export function TagSelect({
   onChange,
   className,
 }: TagSelectProps) {
-  function toggle(option: string) {
-    if (selected.includes(option)) {
-      onChange(selected.filter((s) => s !== option));
-    } else {
-      onChange([...selected, option]);
-    }
-  }
-
   return (
     <div className={cn("flex flex-wrap gap-2", className)}>
       {options.map((option) => {
@@ -32,7 +25,7 @@ export function TagSelect({
           <button
             key={option}
             type="button"
-            onClick={() => toggle(option)}
+            onClick={() => onChange(option)}
             aria-pressed={isSelected}
             className={cn(
               "px-4 py-1.5 rounded-full text-sm font-medium transition",

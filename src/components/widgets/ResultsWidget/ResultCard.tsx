@@ -1,11 +1,14 @@
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
-import type { AppResult, StoreResult } from "./types";
+import type { StoreResult } from "./types";
+import type { App } from "@/lib/api/apps";
+import Image from "next/image";
+import Link from "next/link";
 
 type ResultCardProps = {
-  app: AppResult;
-  onCompare?: (app: AppResult) => void;
+  app: App;
+  onCompare?: (app: App) => void;
 };
 
 export function ResultCard({ app, onCompare }: ResultCardProps) {
@@ -13,60 +16,73 @@ export function ResultCard({ app, onCompare }: ResultCardProps) {
 
   return (
     <article className="flex flex-col items-start gap-6 rounded-2xl border border-[#DCDFD8] bg-white p-6">
-      <div className="flex flex-row min-w-0 flex-1 gap-5">
-        <div
-          className={cn(
-            "flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl",
-            "bg-blue-50 text-4xl font-bold text-blue-600",
-          )}
-          aria-hidden="true"
-        >
-          {app.letter}
-        </div>
+      <div className="flex w-full min-w-0 flex-row gap-5">
+        {app.icon_url ? (
+          <Image
+            className="shrink-0 self-start rounded-2xl shadow-lg"
+            src={app.icon_url}
+            width={96}
+            height={96}
+            alt=""
+          />
+        ) : (
+          <div
+            className={cn(
+              "flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl",
+              "bg-blue-50 text-4xl font-bold text-blue-600",
+            )}
+            aria-hidden="true"
+          >
+            {app.name[0]}
+          </div>
+        )}
 
-        <div className="flex flex-col">
-          <div className="flex flex-col">
-            <h3 className="text-2xl font-bold leading-tight text-black">
+        <div className="flex min-w-0 flex-1 flex-col gap-3">
+          <div className="flex min-w-0 flex-col">
+            <h3 className="truncate text-2xl font-bold leading-tight text-black">
               {app.name}
             </h3>
-            <p className="text-base text-neutral-500">{app.company}</p>
+            <p className="truncate text-base text-neutral-500">
+              {app.developer}
+            </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="font-mono text-base text-neutral-800">
-              {app.package}
+          <div className="flex min-w-0 flex-wrap items-center gap-3">
+            <span className="truncate font-mono text-base text-neutral-800">
+              {app.package_name}
             </span>
-            <span className="rounded-full bg-neutral-100 px-3 py-1 text-sm text-neutral-700">
+            <span className="shrink-0 rounded-full bg-neutral-100 px-3 py-1 text-sm text-neutral-700">
               {app.category}
             </span>
-            <span className="flex items-center gap-1 text-base text-neutral-800">
-              <StarIcon className="h-5 w-5 text-amber-500" />
-              {app.rating.toString().replace(".", ",")}
-            </span>
           </div>
+
+          <span className="flex items-center gap-1 text-base text-neutral-800">
+            <StarIcon className="h-5 w-5 text-amber-500" />
+            {app.rating.toString().replace(".", ",")}
+          </span>
         </div>
 
-        <div className="flex shrink-0 flex-col gap-2 sm:flex-row sm:items-center ml-4">
-          <Button
-            onClick={() => router.push(`/apps/${app.package}`)}
-            className="self-start bg-blue-600 px-6 py-3 text-base font-bold text-white hover:bg-blue-700"
-          >
-            Открыть
-          </Button>
+        <div className="flex shrink-0 flex-col gap-2 self-start sm:flex-row sm:items-center">
+          <Link href={`/apps/${app.package_name}`} target="_blank">
+            <Button className="bg-blue-600 px-6 py-3 text-base font-bold text-white hover:bg-blue-700">
+              Открыть
+            </Button>
+          </Link>
+
           <Button
             onClick={() => onCompare?.(app)}
-            className="self-start border-2 border-blue-600 bg-white px-6 py-3 text-base font-bold text-blue-600 hover:bg-blue-50"
+            className="border border-blue-600 bg-white px-6 py-3 text-base font-bold text-blue-600 hover:bg-blue-50"
           >
             Сравнить
           </Button>
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2 pt-1">
+      {/*<div className="flex flex-wrap items-center gap-2 pt-1">
         {app.stores.map((store) => (
           <StorePill key={store.name} store={store} />
         ))}
-      </div>
+      </div>*/}
     </article>
   );
 }
