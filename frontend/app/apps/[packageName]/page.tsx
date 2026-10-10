@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AppHeader } from "@/components/widgets/AppDetail/AppHeader";
-import { StoreDataTable } from "@/components/widgets/AppDetail/StoreDataTable";
 import { getApp } from "@/lib/api/apps";
+import { AppDetailView } from "@/components/widgets/AppDetail/AppDetailView";
 
 type Props = {
   params: Promise<{ packageName: string }>;
 };
+
+export const instant = false;
 
 export default async function AppPage({ params }: Props) {
   const { packageName } = await params;
@@ -31,7 +33,9 @@ export default async function AppPage({ params }: Props) {
       />
 
       <div className="mt-8">
-        <StoreDataTable data={app} />
+        <AppDetailView
+          stores={[{ kind: "google-play", label: "Google Play", app }]}
+        />
       </div>
     </main>
   );

@@ -28,12 +28,7 @@ export function ResultsWidget({
 
       <div className="flex flex-col gap-3">
         {results.map((app) => (
-          <ResultCard
-            key={app.id}
-            app={app}
-            onOpen={onOpen}
-            onCompare={onCompare}
-          />
+          <ResultCard key={app.id} app={app} onCompare={onCompare} />
         ))}
       </div>
     </section>

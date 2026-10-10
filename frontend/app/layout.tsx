@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Tabs } from "@/components/ui/Tabs";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,16 +38,21 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <div className="flex flex-1 gap-10 w-fit max-w-7xl px-16">
             <div className="flex flex-row gap-4 align-middle">
               <Image
-                src="icon.svg"
+                src="/icon.svg"
                 width={32}
                 height={32}
                 alt="App Grabber Icon"
               ></Image>
-              <p className="text-black self-center text-[20px] font-medium">
+              <Link
+                href="/"
+                className="text-black self-center text-[20px] font-medium"
+              >
                 App Grabber
-              </p>
+              </Link>
             </div>
-            <Tabs items={NAV_ITEMS} />
+            <Suspense fallback={null}>
+              <Tabs items={NAV_ITEMS} />
+            </Suspense>
           </div>
         </header>
         {children}

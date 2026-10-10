@@ -20,7 +20,7 @@ export function StoreTabs({
     <div
       role="tablist"
       className={cn(
-        "flex items-center gap-10 border-b border-[#DCDFD8]",
+        "flex items-center gap-10 border-b border-[#DCDFD8] px-2",
         className,
       )}
     >

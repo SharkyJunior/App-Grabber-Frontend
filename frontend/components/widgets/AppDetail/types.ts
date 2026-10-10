@@ -5,3 +5,4 @@ export type StoreMeta = {
   label: string;              // "Google Play"
   app: import("@/lib/api/apps").App;
 };
+

@@ -24,7 +24,9 @@ export function Tabs({ items, className }: TabsProps) {
     >
       {items.map((item) => {
         const isActive =
-          item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+          item.href === "/"
+            ? pathname === "/" || pathname.startsWith("/apps/")
+            : pathname.startsWith(item.href);
 
         return (
           <Link

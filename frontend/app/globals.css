@@ -5,6 +5,10 @@
     --foreground: #171717;
 }
 
+@theme {
+    --color-error: #a3262a;
+}
+
 @theme inline {
     --color-background: var(--background);
     --color-foreground: var(--foreground);
