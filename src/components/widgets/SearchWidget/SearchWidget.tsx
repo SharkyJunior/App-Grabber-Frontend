@@ -9,41 +9,59 @@ import { TagSelect } from "@/components/ui/TagSelect";
 import { SearchWidgetProps } from "./types";
 import { Error } from "@/components/ui/Error";
 import { useSearchStore } from "@/stores/useSearchStore";
-
-const invalidQueryText =
-  "Это не похоже на package name. Он выглядит так: com.company.app";
+import { Spinner } from "@/components/ui/Spinner";
 
 export default function SearchWidget({
   placeholder = "com.example.app или название приложения",
-  onSearch,
   className,
 }: SearchWidgetProps) {
   const router = useRouter();
-  const { query, selectedStores, toggleStore, setQuery, appendToHistory } =
-    useSearchStore();
-  const [error, setError] = useState(false);
-  const [isSearching, setIsSearching] = useState(false);
+  const {
+    query,
+    selectedStores,
+    toggleStore,
+    setQuery,
+    appendToHistory,
+    clearResults,
+    runSearch,
+    isSearching,
+  } = useSearchStore();
+  const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
   const isPackage = isValidPackageName(query.trim());
+  const busy = isPending || isSearching;
 
-  async function handleSubmit(e: React.SubmitEvent) {
+  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!query.trim()) return;
-    if (!isPackage) {
-      setError(true);
+    const q = query.trim();
+    if (!q) return;
+
+    setError(null);
+    appendToHistory(q);
+
+    if (isPackage) {
+      clearResults();
+      const res = await fetch(`/api/apps/${encodeURIComponent(q)}`);
+      if (res.status === 404) {
+        setError(`Приложение ${q} не найдено`);
+        return;
+      }
+      if (!res.ok) {
+        setError("Не удалось загрузить приложение");
+        return;
+      }
+      startTransition(() => router.push(`/apps/${encodeURIComponent(q)}`));
       return;
     }
 
-    setIsSearching(true);
-    try {
-      router.push(`/apps/${query}`);
-      appendToHistory(query.trim());
-      setQuery("");
-      onSearch?.(query);
-    } finally {
-      setIsSearching(false);
-    }
+    runSearch(q);
+  }
+
+  function handleQueryChange(value: string) {
+    setQuery(value);
+    if (error) setError(null);
+    //if (results) setResults(null);
   }
 
   return (
@@ -56,19 +74,21 @@ export default function SearchWidget({
       <form onSubmit={handleSubmit} className="flex gap-2">
         <Input
           value={query}
-          onChange={(e) => {
-            if (error) setError(false);
-            setQuery(e.target.value);
-          }}
+          onChange={(e) => handleQueryChange(e.target.value)}
           placeholder={placeholder}
           className="flex-1"
-          variant={isPackage ? "" : "error"}
         />
-        <Button type="submit" disabled={isPending}>
-          {isPending ? "Ищем..." : "Поиск"}
-        </Button>
+        {busy ? (
+          <Spinner className="self-center" />
+        ) : (
+          <Button type="submit" disabled={isPending}>
+            Поиск
+          </Button>
+        )}
       </form>
-      {error && <Error text={invalidQueryText} />}
+
+      {error !== null && <Error text={error} />}
+
       <div className="flex flex-row align-middle gap-4">
         <p className="text-sm text-neutral-600 self-center">Искать в:</p>
         <TagSelect

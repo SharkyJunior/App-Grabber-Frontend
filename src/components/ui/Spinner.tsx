@@ -1,7 +1,13 @@
-export function Spinner() {
+import { cn } from "@/lib/utils";
+
+export type SpinnerProps = {
+  className?: string;
+};
+
+export function Spinner({ className }: SpinnerProps) {
   return (
     <svg
-      className="h-6 w-6 animate-spin text-neutral-400"
+      className={cn("h-6 w-6 animate-spin text-neutral-400", className)}
       viewBox="0 0 24 24"
       fill="none"
       aria-label="Загрузка"

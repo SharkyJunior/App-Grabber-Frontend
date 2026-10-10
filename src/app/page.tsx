@@ -4,6 +4,7 @@ import { PromptSelect } from "@/components/ui/PromptSelect";
 import { HowItWorks } from "@/components/widgets/HowItWorks";
 import { AppResult, ResultsWidget } from "@/components/widgets/ResultsWidget";
 import SearchWidget from "@/components/widgets/SearchWidget/SearchWidget";
+import { isValidPackageName } from "@/lib/utils";
 import { useSearchStore } from "@/stores/useSearchStore";
 import { useRouter } from "next/navigation";
 
@@ -63,7 +64,7 @@ const mock: AppResult[] = [
 ];
 
 export default function Home() {
-  const { queryHistory } = useSearchStore();
+  const { queryHistory, runSearch } = useSearchStore();
   const router = useRouter();
 
   return (
@@ -81,17 +82,18 @@ export default function Home() {
       {queryHistory.length > 0 && (
         <PromptSelect
           prompts={queryHistory}
-          onSelect={(p) => router.push(`/apps/${p}`)}
+          onSelect={(p) => {
+            if (isValidPackageName(p)) {
+              router.push(`/apps/${p}`);
+            } else {
+              runSearch(p);
+            }
+          }}
         />
       )}
 
-      <div className="grid grid-cols-12 self-center align-middle gap-10">
-        <ResultsWidget
-          className="col-span-8"
-          results={mock}
-          onOpen={() => {}}
-          onCompare={() => {}}
-        ></ResultsWidget>
+      <div className="grid grid-cols-12 self-center items-start gap-10">
+        <ResultsWidget className="col-span-8"></ResultsWidget>
         <HowItWorks
           className="col-span-4"
           steps={[

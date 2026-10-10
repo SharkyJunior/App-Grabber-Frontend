@@ -2,12 +2,12 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Store } from "@/stores/useSearchStore";
+import { StoreName } from "@/stores/useSearchStore";
 
 export type TagSelectProps = {
-  options: Store[];
+  options: StoreName[];
   selected: string[];
-  onChange: (selected: Store) => void;
+  onChange: (selected: StoreName) => void;
   className?: string;
 };
 

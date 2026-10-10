@@ -14,7 +14,7 @@ export function PromptSelect({
   className,
 }: PromptSelectProps) {
   return (
-    <div className={cn("flex gap-4 mb-4 px-1", className)}>
+    <div className={cn("flex flex-wrap gap-4 mb-4 px-1", className)}>
       <p className="text-muted-text self-center">{title}:</p>
       {prompts?.map((prompt) => {
         return (
