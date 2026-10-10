@@ -2,7 +2,9 @@
 
 Next.js frontend for App Grabber (VK Internship Project)
 
-[Link to backend](https://github.com/grishacake/CheckApp)
+<img width="500" alt="Screenshot 2026-10-10 at 21 49 12" src="https://github.com/user-attachments/assets/b7bbcfce-e589-4dd9-8133-9204e35557f9" />
+<img width="500" alt="Screenshot 2026-10-10 at 21 49 25" src="https://github.com/user-attachments/assets/cab54b8c-cd8f-47a4-8113-b6e5613bc4a9" />
+
 
 ## Installation
 
@@ -21,7 +23,10 @@ cd CheckApp && make run
 3. Run the frontend:
 
 ```bash
-cd ../App-Grabber-Frontend && npm run start
+cd ../App-Grabber-Frontend && npm run build && npm run start
 ```
 
 4. Access the service at `http://localhost:3000/`
+
+## Useful links
+- [Link to backend](https://github.com/grishacake/CheckApp)
