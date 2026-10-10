@@ -41,7 +41,6 @@ export default function SearchWidget({
     appendToHistory(q);
 
     if (isPackage) {
-      clearResults();
       const res = await fetch(`/api/apps/${encodeURIComponent(q)}`);
       if (res.status === 404) {
         setError(`Приложение ${q} не найдено`);
@@ -56,6 +55,7 @@ export default function SearchWidget({
     }
 
     runSearch(q);
+    
   }
 
   function handleQueryChange(value: string) {

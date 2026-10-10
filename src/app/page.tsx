@@ -64,7 +64,7 @@ const mock: AppResult[] = [
 ];
 
 export default function Home() {
-  const { queryHistory, runSearch } = useSearchStore();
+  const { queryHistory, runSearch, setQuery } = useSearchStore();
   const router = useRouter();
 
   return (
@@ -83,6 +83,7 @@ export default function Home() {
         <PromptSelect
           prompts={queryHistory}
           onSelect={(p) => {
+            setQuery(p);
             if (isValidPackageName(p)) {
               router.push(`/apps/${p}`);
             } else {

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import type { StoreResult } from "./types";
 import type { App } from "@/lib/api/apps";
 import Image from "next/image";
+import Link from "next/link";
 
 type ResultCardProps = {
   app: App;
@@ -62,12 +63,12 @@ export function ResultCard({ app, onCompare }: ResultCardProps) {
         </div>
 
         <div className="flex shrink-0 flex-col gap-2 self-start sm:flex-row sm:items-center">
-          <Button
-            onClick={() => router.push(`/apps/${app.package_name}`)}
-            className="bg-blue-600 px-6 py-3 text-base font-bold text-white hover:bg-blue-700"
-          >
-            Открыть
-          </Button>
+          <Link href={`/apps/${app.package_name}`} target="_blank">
+            <Button className="bg-blue-600 px-6 py-3 text-base font-bold text-white hover:bg-blue-700">
+              Открыть
+            </Button>
+          </Link>
+
           <Button
             onClick={() => onCompare?.(app)}
             className="border border-blue-600 bg-white px-6 py-3 text-base font-bold text-blue-600 hover:bg-blue-50"
