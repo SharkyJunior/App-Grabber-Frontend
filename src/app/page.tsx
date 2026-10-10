@@ -1,8 +1,11 @@
 "use client";
 
+import { PromptSelect } from "@/components/ui/PromptSelect";
 import { HowItWorks } from "@/components/widgets/HowItWorks";
 import { AppResult, ResultsWidget } from "@/components/widgets/ResultsWidget";
 import SearchWidget from "@/components/widgets/SearchWidget/SearchWidget";
+import { useSearchStore } from "@/stores/useSearchStore";
+import { useRouter } from "next/navigation";
 
 const mock: AppResult[] = [
   {
@@ -60,6 +63,9 @@ const mock: AppResult[] = [
 ];
 
 export default function Home() {
+  const { queryHistory } = useSearchStore();
+  const router = useRouter();
+
   return (
     <main className="flex flex-1 self-center w-full max-w-7xl flex-col items-center justify-start gap-4 py-16 px-16 sm:items-start">
       <h1 className="text-black text-4xl font-semibold w-1/2 h-auto">
@@ -70,7 +76,14 @@ export default function Home() {
         <br />
         Мы соберём данные и сопоставим их между магазинами.
       </h2>
-      <SearchWidget className="w-full my-4" />
+      <SearchWidget className="w-full mt-4 mb-2" />
+
+      {queryHistory.length > 0 && (
+        <PromptSelect
+          prompts={queryHistory}
+          onSelect={(p) => router.push(`/apps/${p}`)}
+        />
+      )}
 
       <div className="grid grid-cols-12 self-center align-middle gap-10">
         <ResultsWidget

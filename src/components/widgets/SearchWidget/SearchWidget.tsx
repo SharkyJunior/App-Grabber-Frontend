@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { cn, isValidPackageName } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
@@ -8,35 +8,41 @@ import { Input } from "@/components/ui/Input";
 import { TagSelect } from "@/components/ui/TagSelect";
 import { SearchWidgetProps } from "./types";
 import { Error } from "@/components/ui/Error";
+import { useSearchStore } from "@/stores/useSearchStore";
 
 const invalidQueryText =
   "Это не похоже на package name. Он выглядит так: com.company.app";
 
 export default function SearchWidget({
-  placeholder = "com.example.app",
+  placeholder = "com.example.app или название приложения",
   onSearch,
   className,
 }: SearchWidgetProps) {
   const router = useRouter();
-  const [query, setQuery] = useState("");
+  const { query, selectedStores, toggleStore, setQuery, appendToHistory } =
+    useSearchStore();
   const [error, setError] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [selected, setSelected] = useState(["Google Play", "RuStore"]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [isPending, startTransition] = useTransition();
+
+  const isPackage = isValidPackageName(query.trim());
 
   async function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
     if (!query.trim()) return;
-    if (!isValidPackageName(query)) {
+    if (!isPackage) {
       setError(true);
       return;
     }
 
-    setIsLoading(true);
+    setIsSearching(true);
     try {
       router.push(`/apps/${query}`);
+      appendToHistory(query.trim());
+      setQuery("");
       onSearch?.(query);
     } finally {
-      setIsLoading(false);
+      setIsSearching(false);
     }
   }
 
@@ -56,10 +62,10 @@ export default function SearchWidget({
           }}
           placeholder={placeholder}
           className="flex-1"
-          variant={isValidPackageName(query) ? "" : "error"}
+          variant={isPackage ? "" : "error"}
         />
-        <Button type="submit" disabled={isLoading}>
-          {isLoading ? "Ищем..." : "Поиск"}
+        <Button type="submit" disabled={isPending}>
+          {isPending ? "Ищем..." : "Поиск"}
         </Button>
       </form>
       {error && <Error text={invalidQueryText} />}
@@ -67,8 +73,8 @@ export default function SearchWidget({
         <p className="text-sm text-neutral-600 self-center">Искать в:</p>
         <TagSelect
           options={["Google Play", "RuStore"]}
-          selected={selected}
-          onChange={(s) => setSelected(s)}
+          selected={selectedStores}
+          onChange={toggleStore}
         />
       </div>
     </section>
