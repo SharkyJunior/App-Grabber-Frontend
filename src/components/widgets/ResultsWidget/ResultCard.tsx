@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import type { StoreResult } from "./types";
 import type { App } from "@/lib/api/apps";
@@ -12,8 +11,6 @@ type ResultCardProps = {
 };
 
 export function ResultCard({ app, onCompare }: ResultCardProps) {
-  const router = useRouter();
-
   return (
     <article className="flex flex-col items-start gap-6 rounded-2xl border border-[#DCDFD8] bg-white p-6">
       <div className="flex w-full min-w-0 flex-row gap-5">

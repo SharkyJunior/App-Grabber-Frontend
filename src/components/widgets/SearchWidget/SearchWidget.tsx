@@ -22,7 +22,6 @@ export default function SearchWidget({
     toggleStore,
     setQuery,
     appendToHistory,
-    clearResults,
     runSearch,
     isSearching,
   } = useSearchStore();
