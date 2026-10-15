@@ -1,10 +1,72 @@
 "use client";
 
+import React, { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import Image from "next/image";
 
+// Animation styles for the copied popup using CSS transitions
+const copyPopupStyles = `
+  @keyframes copyPopupAppear {
+    0% {
+      opacity: 0;
+      transform: translateY(-50px) scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes copyPopupDisappear {
+    0% {
+      transform: translateX(0) scale(1);
+    }
+    100% {
+      transform: translateX(100vw) scale(1.05);
+    }
+  }
+
+  .copy-popup-enter {
+    animation: copyPopupAppear 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  .copy-popup-exit {
+    animation: copyPopupDisappear 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  .copy-dot-pulse {
+    animation: dotBounce 1.2s ease-out infinite;
+  }
+
+  @keyframes dotBounce {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.4);
+      opacity: 0.5;
+    }
+  }
+`;
+
+// Inject styles into the document
+function useCopyAnimationStyles() {
+  React.useEffect(() => {
+    const style = document.createElement("style");
+    style.textContent = copyPopupStyles;
+    document.head.appendChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+}
+
+// Use the style injection hook at component level
+
 type AppHeaderProps = {
+  copiedPopupRef?: React.RefObject<HTMLElement | null>;
   name: string;
   developer: string;
   package_name: string;
@@ -31,6 +93,8 @@ export function AppHeader({
   compareLabel = "Сравнить",
   className,
 }: AppHeaderProps) {
+  useCopyAnimationStyles();
+
   return (
     <section
       className={cn(
@@ -67,7 +131,7 @@ export function AppHeader({
           <span className="rounded-lg bg-neutral-100 px-3 py-1 font-mono text-base text-neutral-800">
             {package_name}
           </span>
-          <CopyButton value={package_name} />
+          <CopyButton value={package_name} copiedPopupRef={copiedPopupRef} />
           {availableStore && (
             <span className="inline-flex items-center gap-2 rounded-full border border-emerald-600 px-3 py-1 text-sm font-medium text-emerald-700">
               <span className="h-2 w-2 rounded-full bg-emerald-600" />
@@ -101,25 +165,89 @@ export function AppHeader({
   );
 }
 
-function CopyButton({ value }: { value: string }) {
-  "use client";
+function CopyButton({
+  value,
+  copiedPopupRef,
+}: {
+  value: string;
+  copiedPopupRef?: React.RefObject<HTMLElement | null>;
+}) {
+  const [isCopied, setIsCopied] = React.useState(false);
+  const timeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  React.useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
+  const handleCopy = React.useCallback(() => {
+    const popup = copiedPopupRef?.current;
+    if (popup) {
+      // Add enter class to trigger animation
+      popup.classList.add("copy-popup-enter");
+      // Trigger reflow to restart animation
+      void popup.offsetWidth;
+      // Remove enter class and add exit class to trigger exit animation
+      popup.classList.remove("copy-popup-enter");
+      popup.classList.add("copy-popup-exit");
+    }
+
+    navigator.clipboard.writeText(value).then(() => {
+      setIsCopied(true);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => {
+        if (popup) {
+          popup.classList.remove("copy-popup-exit");
+        }
+        setIsCopied(false);
+      }, 2000);
+    });
+  }, [value, copiedPopupRef]);
+
   return (
-    <button
-      type="button"
-      aria-label="Скопировать"
-      onClick={() => navigator.clipboard.writeText(value)}
-      className="rounded p-1 text-neutral-500 transition hover:bg-neutral-100 hover:text-black"
-    >
-      <svg
-        viewBox="0 0 20 20"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        className="h-5 w-5"
+    <>
+      <button
+        type="button"
+        aria-label="Скопировать"
+        onClick={handleCopy}
+        className="rounded p-1 text-neutral-500 transition hover:bg-neutral-100 hover:text-black"
       >
-        <rect x="6" y="6" width="10" height="10" rx="1.5" />
-        <path d="M4 14V5a1 1 0 011-1h9" />
-      </svg>
-    </button>
+        <svg
+          viewBox="0 0 20 20"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          className={`h-5 w-5 transition-colors ${
+            isCopied ? "text-green-600" : ""
+          }`}
+        >
+          <rect x="6" y="6" width="10" height="10" rx="1.5" />
+          <path d="M4 14V5a1 1 0 011-1h9" />
+        </svg>
+      </button>
+
+      {isCopied && (
+        <div className="pointer-events-none fixed inset-x-0 top-8 z-50 flex justify-center px-4">
+          <div
+            ref={copiedPopupRef}
+            role="status"
+            aria-live="polite"
+            className="flex items-center gap-2 whitespace-nowrap rounded-full bg-white px-4 py-2.5 shadow-lg ring-1 ring-black/5 copy-popup-enter"
+          >
+            <span className="relative flex h-2.5 w-2.5 shrink-0 items-center justify-center copy-dot-pulse">
+              <span
+                className="absolute h-2.5 w-2.5 rounded-full bg-green-500"
+                style={{ animation: "copyDotPulse 1.2s ease-out infinite" }}
+              />
+              <span className="relative h-2.5 w-2.5 rounded-full bg-green-500" />
+            </span>
+            <span className="text-sm font-medium text-gray-800">
+              Скопировано в буфер обмена
+            </span>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
