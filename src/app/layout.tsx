@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Tabs } from "@/components/ui/Tabs";
+import { SessionManager } from "@/components/widgets/SessionManager/SessionManager";
+import { UserMenu } from "@/components/widgets/UserMenu/UserMenu";
 import { Suspense } from "react";
 
 const geistSans = Geist({
@@ -54,9 +56,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <Suspense fallback={null}>
               <Tabs items={NAV_ITEMS} />
             </Suspense>
+            <UserMenu />
           </div>
         </header>
         {children}
+        <SessionManager />
 
         <footer></footer>
       </body>
