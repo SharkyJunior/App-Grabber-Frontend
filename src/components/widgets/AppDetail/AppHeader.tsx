@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import Image from "next/image";
 
-// Animation styles for the copied popup using CSS transitions
 const copyPopupStyles = `
   @keyframes copyPopupAppear {
     0% {
@@ -51,7 +50,6 @@ const copyPopupStyles = `
   }
 `;
 
-// Inject styles into the document
 function useCopyAnimationStyles() {
   React.useEffect(() => {
     const style = document.createElement("style");
@@ -63,10 +61,7 @@ function useCopyAnimationStyles() {
   }, []);
 }
 
-// Use the style injection hook at component level
-
 type AppHeaderProps = {
-  copiedPopupRef?: React.RefObject<HTMLElement | null>;
   name: string;
   developer: string;
   package_name: string;
@@ -131,7 +126,7 @@ export function AppHeader({
           <span className="rounded-lg bg-neutral-100 px-3 py-1 font-mono text-base text-neutral-800">
             {package_name}
           </span>
-          <CopyButton value={package_name} copiedPopupRef={copiedPopupRef} />
+          <CopyButton value={package_name} />
           {availableStore && (
             <span className="inline-flex items-center gap-2 rounded-full border border-emerald-600 px-3 py-1 text-sm font-medium text-emerald-700">
               <span className="h-2 w-2 rounded-full bg-emerald-600" />
@@ -184,11 +179,8 @@ function CopyButton({
   const handleCopy = React.useCallback(() => {
     const popup = copiedPopupRef?.current;
     if (popup) {
-      // Add enter class to trigger animation
       popup.classList.add("copy-popup-enter");
-      // Trigger reflow to restart animation
       void popup.offsetWidth;
-      // Remove enter class and add exit class to trigger exit animation
       popup.classList.remove("copy-popup-enter");
       popup.classList.add("copy-popup-exit");
     }
@@ -230,7 +222,6 @@ function CopyButton({
       {isCopied && (
         <div className="pointer-events-none fixed inset-x-0 top-8 z-50 flex justify-center px-4">
           <div
-            ref={copiedPopupRef}
             role="status"
             aria-live="polite"
             className="flex items-center gap-2 whitespace-nowrap rounded-full bg-white px-4 py-2.5 shadow-lg ring-1 ring-black/5 copy-popup-enter"
