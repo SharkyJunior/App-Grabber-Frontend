@@ -8,11 +8,25 @@ import Link from "next/link";
 type ResultCardProps = {
   app: App;
   onCompare?: (app: App) => void;
+  className?: string;
+  variant?: "search" | "favorite";
+  onRemoveFromFavs?: (packageName: string) => void;
 };
 
-export function ResultCard({ app, onCompare }: ResultCardProps) {
+export function ResultCard({
+  app,
+  onCompare,
+  className,
+  variant = "search",
+  onRemoveFromFavs,
+}: ResultCardProps) {
   return (
-    <article className="flex flex-col items-start gap-6 rounded-2xl border border-[#DCDFD8] bg-white p-6">
+    <article
+      className={cn(
+        "flex flex-col items-start gap-6 rounded-2xl border border-[#DCDFD8] bg-white p-6",
+        className,
+      )}
+    >
       <div className="flex w-full min-w-0 flex-row gap-5">
         {app.icon_url ? (
           <Image
@@ -72,6 +86,15 @@ export function ResultCard({ app, onCompare }: ResultCardProps) {
           >
             Сравнить
           </Button>
+
+          {variant === "favorite" && (
+            <Button
+              onClick={() => onRemoveFromFavs?.(app.package_name)}
+              className="border border-red-600 bg-white px-6 py-3 text-base font-bold text-red-600 hover:bg-blue-50"
+            >
+              Удалить
+            </Button>
+          )}
         </div>
       </div>
 

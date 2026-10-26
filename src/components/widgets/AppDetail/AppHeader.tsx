@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import Image from "next/image";
+import { FavoriteButton } from "./FavoriteButton";
 
 type AppHeaderProps = {
   name: string;
@@ -25,7 +26,6 @@ export function AppHeader({
   letter,
   iconUrl = null,
   availableStore,
-  onSave,
   onExportJson,
   onCompare,
   compareLabel = "Сравнить",
@@ -78,12 +78,7 @@ export function AppHeader({
       </div>
 
       <div className="flex shrink-0 items-center gap-3">
-        <Button
-          onClick={onSave}
-          className="bg-blue-600 px-6 py-3 text-base font-bold text-white hover:bg-blue-700"
-        >
-          Сохранить
-        </Button>
+        <FavoriteButton packageName={package_name} />
         <Button
           onClick={onExportJson}
           className="border-2 border-blue-600 bg-white px-6 py-3 text-base font-bold text-blue-600 hover:bg-blue-50"
