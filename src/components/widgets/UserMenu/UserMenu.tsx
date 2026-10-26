@@ -20,7 +20,9 @@ export function UserMenu() {
   if (status === "authenticated" && user) {
     return (
       <div className="ml-auto flex items-center gap-4 self-center">
-        <span className="text-black font-medium">{user.nickname}</span>
+        <Link href={`/profile`} className="text-black font-medium">
+          {user.nickname}
+        </Link>
         <Button variant="secondary" onClick={logout}>
           Выйти
         </Button>
