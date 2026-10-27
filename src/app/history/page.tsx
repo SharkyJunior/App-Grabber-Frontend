@@ -10,10 +10,25 @@ import { Error as ErrorView } from "@/components/ui/Error";
 import Image from "next/image";
 import { formatRussianRelative } from "@/lib/utils";
 
+type GroupedView = View & { count: number };
+
+function groupConsecutive(history: View[]): GroupedView[] {
+  const result: GroupedView[] = [];
+  for (const v of history) {
+    const last = result[result.length - 1];
+    if (last && last.app.package_name === v.app.package_name) {
+      last.count += 1; // extend the running run
+    } else {
+      result.push({ ...v, count: 1 }); // start a new run
+    }
+  }
+  return result;
+}
+
 export default function HistoryPage() {
   const router = useRouter();
   const user = useAuthStore((s) => s.user);
-  const [items, setItems] = useState<View[] | null>(null);
+  const [items, setItems] = useState<GroupedView[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -27,7 +42,7 @@ export default function HistoryPage() {
         if (cancelled) return;
         if (!res.ok) throw new Error(`history: ${res.status}`);
         const data: HistoryPage = await res.json();
-        setItems(data.history);
+        setItems(groupConsecutive(data.history));
       })
       .catch((e) => {
         if (!cancelled) setError(e.message);
@@ -59,6 +74,9 @@ export default function HistoryPage() {
               className="w-8 h-8 rounded"
             />
             <span className="font-medium">{v.app.name}</span>
+            {v.count > 1 && (
+              <span className="ml-2 text-sm text-gray-500">×{v.count}</span>
+            )}
           </div>
           <span className="text-sm text-gray-500">
             {formatRussianRelative(v.viewed_at)}

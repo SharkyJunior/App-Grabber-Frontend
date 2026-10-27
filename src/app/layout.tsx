@@ -36,7 +36,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#F3F4F1] font-sans justify-center">
+      <body className="min-h-full flex flex-col bg-[#F3F4F1] font-sans">
         <header className="flex align-middle justify-center sticky top-0 z-10 bg-white h-16 border border-[#DCDFD8] px-16">
           <div className="flex flex-1 gap-10 w-fit max-w-7xl px-16">
             <div className="flex flex-row gap-4 align-middle">
