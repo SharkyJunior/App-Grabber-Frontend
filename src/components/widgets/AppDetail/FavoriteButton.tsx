@@ -4,6 +4,7 @@ import { authFetch } from "@/lib/api/authFetch";
 import type { FavoritesPage } from "@/lib/api/favorites";
 import { ACTIVE_STORE } from "@/lib/constants";
 import { Button } from "@/components/ui/Button";
+import { FavoriteOffIcon, FavoriteOnIcon } from "@/components/icons";
 
 type Props = { packageName: string };
 
@@ -46,8 +47,18 @@ export function FavoriteButton({ packageName }: Props) {
   };
 
   return (
-    <Button onClick={toggle} disabled={isFavorite == null || busy}>
-      {isFavorite ? "★ В избранном" : "☆ В избранное"}
+    <Button
+      iconOnly
+      className="flex items-center justify-center bg-transparent text-pink-500 hover:bg-transparent hover:text-pink-400"
+      onClick={toggle}
+      disabled={isFavorite == null || busy}
+      aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+    >
+      {isFavorite ? (
+        <FavoriteOnIcon className="w-6 h-6 block" />
+      ) : (
+        <FavoriteOffIcon className="w-6 h-6 block" />
+      )}
     </Button>
   );
 }

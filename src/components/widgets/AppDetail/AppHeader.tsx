@@ -57,9 +57,12 @@ export function AppHeader({
 
       <div className="flex min-w-0 flex-1 flex-col gap-3">
         <div>
-          <h1 className="text-3xl font-bold leading-tight text-black">
-            {name}
-          </h1>
+          <div className="flex gap-2">
+            <h1 className="text-3xl font-bold leading-tight text-black">
+              {name}
+            </h1>
+            <FavoriteButton packageName={package_name} />
+          </div>
           <p className="text-lg text-neutral-500">{developer}</p>
         </div>
 
@@ -78,7 +81,6 @@ export function AppHeader({
       </div>
 
       <div className="flex shrink-0 items-center gap-3">
-        <FavoriteButton packageName={package_name} />
         <Button
           onClick={onExportJson}
           className="border-2 border-blue-600 bg-white px-6 py-3 text-base font-bold text-blue-600 hover:bg-blue-50"
