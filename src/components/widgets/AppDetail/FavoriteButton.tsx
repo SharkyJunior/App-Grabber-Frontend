@@ -1,14 +1,17 @@
 "use client";
 import { useEffect, useState } from "react";
+import { redirect } from "next/navigation";
 import { authFetch } from "@/lib/api/authFetch";
 import type { FavoritesPage } from "@/lib/api/favorites";
 import { ACTIVE_STORE } from "@/lib/constants";
 import { Button } from "@/components/ui/Button";
 import { FavoriteOffIcon, FavoriteOnIcon } from "@/components/icons";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 type Props = { packageName: string };
 
 export function FavoriteButton({ packageName }: Props) {
+  const { status } = useAuthStore();
   const [isFavorite, setIsFavorite] = useState<boolean | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -32,6 +35,7 @@ export function FavoriteButton({ packageName }: Props) {
   }, [packageName]);
 
   const toggle = async () => {
+    if (status !== "authenticated") redirect("/login");
     if (isFavorite == null || busy) return;
     setBusy(true);
     try {
