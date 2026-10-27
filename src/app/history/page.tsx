@@ -8,6 +8,7 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import { Spinner } from "@/components/ui/Spinner";
 import { Error as ErrorView } from "@/components/ui/Error";
 import Image from "next/image";
+import { formatRussianRelative } from "@/lib/utils";
 
 export default function HistoryPage() {
   const router = useRouter();
@@ -40,14 +41,14 @@ export default function HistoryPage() {
   if (!items) return <Spinner />;
 
   return (
-    <main className="flex flex-1 self-center w-full max-w-7xl flex-col items-center justify-start gap-4 py-16 px-16 sm:items-start">
-      <h1 className="text-2xl font-semibold">История просмотров</h1>
+    <main className="flex flex-1 self-center w-full max-w-7xl flex-col items-center justify-start gap-2 py-16 px-16 sm:items-start">
+      <h1 className="text-2xl font-semibold mb-4">История просмотров</h1>
       {!items.length && <p className="text-gray-500">Пока нет просмотров.</p>}
       {items.map((v) => (
         <Link
           key={v.id}
           href={`/apps/${v.app.package_name}`}
-          className="flex items-center justify-between border rounded-lg p-3 hover:bg-gray-50"
+          className={`w-full flex items-center justify-between bg-white border-2 border-gray-200 rounded-lg p-3 hover:bg-gray-50 `}
         >
           <div className="flex items-center gap-3">
             <Image
@@ -60,7 +61,7 @@ export default function HistoryPage() {
             <span className="font-medium">{v.app.name}</span>
           </div>
           <span className="text-sm text-gray-500">
-            {new Date(v.viewed_at).toLocaleString()}
+            {formatRussianRelative(v.viewed_at)}
           </span>
         </Link>
       ))}

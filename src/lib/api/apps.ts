@@ -33,12 +33,16 @@ export async function getApp(
   return res.json() as Promise<App>;
 }
 
-export async function search(query: string): Promise<AppSearchResult | null> {
+export async function search(
+  query: string,
+  authorization?: string | null,
+): Promise<AppSearchResult | null> {
   const res = await fetch(
     `${API_BASE}/api/search?q=${encodeURIComponent(query)}`,
-    { cache: "no-store" },
+    { cache: "no-store", headers: authHeader(authorization) },
   );
 
+  if (res.status === 401) throw await readError(res);
   if (res.status === 502) return null;
   if (!res.ok) {
     throw new Error(`Failed to search! query=${query}: ${res.status}`);
