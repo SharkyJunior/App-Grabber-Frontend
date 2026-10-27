@@ -2,14 +2,14 @@
 
 import { PromptSelect } from "@/components/ui/PromptSelect";
 import { HowItWorks } from "@/components/widgets/HowItWorks";
-import { AppResult, ResultsWidget } from "@/components/widgets/ResultsWidget";
+import { ResultsWidget } from "@/components/widgets/ResultsWidget";
 import SearchWidget from "@/components/widgets/SearchWidget/SearchWidget";
 import { isValidPackageName } from "@/lib/utils";
 import { useSearchStore } from "@/stores/useSearchStore";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const { queryHistory, runSearch, setQuery } = useSearchStore();
+  const { queryHistory, runSearch, setQuery, clearHistory } = useSearchStore();
   const router = useRouter();
 
   return (
@@ -35,6 +35,7 @@ export default function Home() {
               runSearch(p);
             }
           }}
+          onClearHistory={clearHistory}
         />
       )}
 
