@@ -34,7 +34,7 @@ export function AppHeader({
   return (
     <section
       className={cn(
-        "flex items-center gap-6 rounded-2xl border border-[#DCDFD8] bg-white p-6",
+        "flex items-center gap-6 rounded-2xl border border-border bg-card p-6",
         className,
       )}
     >
@@ -49,7 +49,7 @@ export function AppHeader({
       ) : (
         <div
           aria-hidden="true"
-          className="flex h-28 w-28 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-5xl font-bold text-blue-600"
+          className="flex h-28 w-28 shrink-0 items-center justify-center rounded-2xl bg-accent-subtle text-5xl font-bold text-accent"
         >
           {letter}
         </div>
@@ -58,22 +58,22 @@ export function AppHeader({
       <div className="flex min-w-0 flex-1 flex-col gap-3">
         <div>
           <div className="flex gap-2">
-            <h1 className="text-3xl font-bold leading-tight text-black">
+            <h1 className="text-3xl font-bold leading-tight text-foreground">
               {name}
             </h1>
             <FavoriteButton packageName={package_name} />
           </div>
-          <p className="text-lg text-neutral-500">{developer}</p>
+          <p className="text-lg text-muted-text">{developer}</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <span className="rounded-lg bg-neutral-100 px-3 py-1 font-mono text-base text-neutral-800">
+          <span className="rounded-lg bg-surface-muted px-3 py-1 font-mono text-base text-foreground">
             {package_name}
           </span>
           <CopyButton value={package_name} />
           {availableStore && (
-            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-600 px-3 py-1 text-sm font-medium text-emerald-700">
-              <span className="h-2 w-2 rounded-full bg-emerald-600" />
+            <span className="inline-flex items-center gap-2 rounded-full border border-success px-3 py-1 text-sm font-medium text-success">
+              <span className="h-2 w-2 rounded-full bg-success" />
               {availableStore}
             </span>
           )}
@@ -83,13 +83,13 @@ export function AppHeader({
       <div className="flex shrink-0 items-center gap-3">
         <Button
           onClick={onExportJson}
-          className="border-2 border-blue-600 bg-white px-6 py-3 text-base font-bold text-blue-600 hover:bg-blue-50"
+          className="border-2 border-accent bg-card px-6 py-3 text-base font-bold text-accent hover:bg-accent-subtle"
         >
           Экспорт JSON
         </Button>
         <Button
           onClick={onCompare}
-          className="border-2 border-blue-600 bg-white px-6 py-3 text-base font-bold text-blue-600 hover:bg-blue-50"
+          className="border-2 border-accent bg-card px-6 py-3 text-base font-bold text-accent hover:bg-accent-subtle"
         >
           {compareLabel}
         </Button>
@@ -105,7 +105,7 @@ function CopyButton({ value }: { value: string }) {
       type="button"
       aria-label="Скопировать"
       onClick={() => navigator.clipboard.writeText(value)}
-      className="rounded p-1 text-neutral-500 transition hover:bg-neutral-100 hover:text-black"
+      className="rounded p-1 text-muted-text transition hover:bg-surface-hover hover:text-foreground"
     >
       <svg
         viewBox="0 0 20 20"

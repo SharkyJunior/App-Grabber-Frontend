@@ -21,7 +21,7 @@ export function PromptSelect({
       {prompts?.map((prompt) => {
         return (
           <button
-            className="bg-white p-2 px-4 rounded-2xl border-gray-200 border hover:bg-gray-200 cursor-pointer transition-colors duration-200"
+            className="bg-card p-2 px-4 rounded-2xl border-border border text-foreground hover:bg-surface-hover cursor-pointer transition-colors duration-200"
             key={prompt}
             type="button"
             onClick={() => onSelect?.(prompt)}
@@ -31,7 +31,7 @@ export function PromptSelect({
         );
       })}
       <p
-        className="text-blue-700 underline cursor-pointer hover:text-blue-500 self-center mx-2"
+        className="text-accent underline cursor-pointer hover:text-accent-hover self-center mx-2"
         onClick={onClearHistory}
       >
         Очистить историю

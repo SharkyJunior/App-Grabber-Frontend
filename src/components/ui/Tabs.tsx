@@ -20,7 +20,7 @@ export function Tabs({ items, className }: TabsProps) {
   return (
     <nav
       aria-label="Основная навигация"
-      className={cn("flex items-center gap-10", className)}
+      className={cn("flex items-center gap-6 lg:gap-10", className)}
     >
       {items.map((item) => {
         const isActive =
@@ -34,11 +34,12 @@ export function Tabs({ items, className }: TabsProps) {
             href={item.href}
             aria-current={isActive ? "page" : undefined}
             className={cn(
-              "relative py-4 text-md font-semibold transition-colors",
-              "after:absolute after:left-0 after:right-0 after:bottom-0 after:h-0.75 after:rounded-full after:transition-colors",
+              "relative py-4 text-base font-semibold transition-colors",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm",
+              "after:absolute after:left-0 after:right-0 after:bottom-0 after:h-[3px] after:rounded-full after:transition-colors",
               isActive
-                ? "text-black after:bg-blue-600"
-                : "text-neutral-400 hover:text-neutral-700 after:bg-transparent",
+                ? "text-foreground after:bg-accent"
+                : "text-muted-text hover:text-foreground after:bg-transparent",
             )}
           >
             {item.label}

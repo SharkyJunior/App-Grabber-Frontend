@@ -59,7 +59,7 @@ export function AppPageClient({ packageName }: Props) {
   if (notFound) {
     return (
       <main className="mx-auto w-full max-w-6xl px-16 py-8">
-        <p className="text-gray-500">Приложение не найдено.</p>
+        <p className="text-muted-text">Приложение не найдено.</p>
       </main>
     );
   }
@@ -76,7 +76,7 @@ export function AppPageClient({ packageName }: Props) {
     <main className="mx-auto w-full max-w-6xl px-16 py-8">
       <div
         onClick={() => router.back()}
-        className="mb-4 inline-flex items-center gap-2 text-base text-blue-600 hover:underline"
+        className="mb-4 inline-flex items-center gap-2 text-base text-accent hover:underline"
       >
         <ChevronLeft className="h-4 w-4" />
         Назад

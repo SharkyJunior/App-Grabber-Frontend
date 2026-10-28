@@ -13,16 +13,16 @@ export default function Home() {
   const router = useRouter();
 
   return (
-    <main className="flex flex-1 self-center w-full max-w-7xl flex-col items-center justify-start gap-4 py-16 px-16 sm:items-start">
-      <h1 className="text-black text-4xl font-semibold w-1/2 h-auto">
-        Найдите приложение сразу <br />в нескольких магазинах
+    <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col items-start justify-start gap-4 px-4 py-12 sm:px-8 sm:py-16 lg:px-16">
+      <h1 className="text-foreground w-full max-w-2xl text-3xl font-semibold text-balance sm:text-4xl">
+        Найдите приложение сразу в нескольких магазинах
       </h1>
-      <h2 className="text-gray-500 text-lg font-medium w-1/2">
-        Вставьте package name, ссылку на карточку или название.
-        <br />
-        Мы соберём данные и сопоставим их между магазинами.
+      <h2 className="text-muted-text w-full max-w-2xl text-base font-medium text-pretty sm:text-lg">
+        Вставьте package name, ссылку на карточку или название. Мы соберём данные
+        и сопоставим их между магазинами.
       </h2>
-      <SearchWidget className="w-full mt-4 mb-2" />
+
+      <SearchWidget className="mt-4 mb-2 w-full" />
 
       {queryHistory.length > 0 && (
         <PromptSelect
@@ -39,10 +39,10 @@ export default function Home() {
         />
       )}
 
-      <div className="grid grid-cols-12 self-center items-start gap-10">
-        <ResultsWidget className="col-span-8"></ResultsWidget>
+      <div className="grid w-full grid-cols-1 items-start gap-10 lg:grid-cols-12">
+        <ResultsWidget className="lg:col-span-8" />
         <HowItWorks
-          className="col-span-4"
+          className="lg:col-span-4"
           steps={[
             {
               title: "Введите запрос.",

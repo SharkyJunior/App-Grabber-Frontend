@@ -2,11 +2,8 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { usePathname } from "next/navigation";
-
-const linkBase = "px-4 py-2 rounded-xl font-medium transition";
 
 export function UserMenu() {
   const pathname = usePathname();
@@ -21,8 +18,11 @@ export function UserMenu() {
 
   if (status === "authenticated" && user) {
     return (
-      <div className="ml-auto flex items-center gap-4 self-center">
-        <Link href={`/profile`} className="text-black font-medium">
+      <div className="ml-auto flex items-center gap-4">
+        <Link
+          href="/profile"
+          className="text-foreground font-medium hover:text-accent transition-colors"
+        >
           {user.nickname}
         </Link>
         <Button variant="secondary" onClick={logout}>
@@ -33,22 +33,15 @@ export function UserMenu() {
   }
 
   return (
-    <div className="ml-auto flex items-center gap-2 self-center">
-      <Link
-        href={`/login?next=${encodeURIComponent(pathname)}`}
-        className={cn(
-          linkBase,
-          "bg-white text-black border border-[#DCDFD8] hover:bg-neutral-50",
-        )}
-      >
-        Войти
-      </Link>
-      <Link
-        href={`/register?next=${encodeURIComponent(pathname)}`}
-        className={cn(linkBase, "bg-[#1F4FD8] text-white hover:bg-neutral-800")}
-      >
-        Регистрация
-      </Link>
+    <div className="ml-auto flex items-center gap-2">
+      <Button variant="secondary">
+        <Link href={`/login?next=${encodeURIComponent(pathname)}`}>Войти</Link>
+      </Button>
+      <Button variant="primary">
+        <Link href={`/register?next=${encodeURIComponent(pathname)}`}>
+          Регистрация
+        </Link>
+      </Button>
     </div>
   );
 }

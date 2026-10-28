@@ -29,20 +29,20 @@ export function Profile({ className }: ProfileProps) {
 
       <div className="space-y-2">
         <div>
-          <span className="text-sm text-gray-500">Ник</span>
+          <span className="text-sm text-muted-text">Ник</span>
           <div className="text-lg">{user.nickname}</div>
         </div>
         <div>
-          <span className="text-sm text-gray-500">Email</span>
+          <span className="text-sm text-muted-text">Email</span>
           <div className="text-lg">{user.email}</div>
         </div>
       </div>
 
       <nav className="flex flex-col gap-2">
-        <Link href="/favorites" className="text-blue-600 hover:underline">
+        <Link href="/favorites" className="text-accent hover:underline">
           Избранное
         </Link>
-        <Link href="/history" className="text-blue-600 hover:underline">
+        <Link href="/history" className="text-accent hover:underline">
           История
         </Link>
       </nav>
