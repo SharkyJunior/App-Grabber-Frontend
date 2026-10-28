@@ -6,7 +6,7 @@ import "@testing-library/jest-dom/vitest";
 export default defineConfig({
   plugins: [tsconfigPaths(), react()],
   test: {
-    environment: "jsdom",
+    environment: "happy-dom",
     setupFiles: ["./vitest.setup.ts"],
     coverage: {
       include: [
