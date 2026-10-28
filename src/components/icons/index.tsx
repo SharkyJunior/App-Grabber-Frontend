@@ -23,3 +23,53 @@ export function FavoriteOnIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+export function LightThemeIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        d="M12.002 1a.9.9 0 0 1 .9.9v2.2a.9.9 0 0 1-1.8 0V1.9a.9.9 0 0 1 .9-.9Zm.002 18a.9.9 0 0 1 .9.9v2.2a.9.9 0 0 1-1.8 0v-2.2a.9.9 0 0 1 .9-.9ZM4.661 8.884a.9.9 0 0 0 .9-1.559L3.355 6.128a.9.9 0 0 0-.9 1.559L4.66 8.884Zm17.223 8.663a.9.9 0 0 1-1.23.33l-2.205-1.193a.9.9 0 1 1 .9-1.56l2.205 1.193a.9.9 0 0 1 .33 1.23Zm-3.43-10.23a.9.9 0 1 0 .9 1.56l2.198-1.197a.9.9 0 1 0-.9-1.558l-2.198 1.195ZM2.128 17.547a.9.9 0 0 1 .33-1.23l2.191-1.2a.9.9 0 0 1 .9 1.559l-2.19 1.2a.9.9 0 0 1-1.23-.33Z M12.004 7a4.99 4.99 0 0 0-3.536 1.464A4.983 4.983 0 0 0 7.003 12c0 1.38.56 2.63 1.465 3.536A4.987 4.987 0 0 0 12.004 17c1.382 0 2.632-.56 3.537-1.464A4.983 4.983 0 0 0 17.006 12c0-1.38-.56-2.63-1.465-3.536A4.987 4.987 0 0 0 12.004 7ZM9.741 9.737a3.186 3.186 0 0 1 2.263-.937c.885 0 1.683.356 2.264.937.581.581.938 1.379.938 2.263 0 .884-.357 1.682-.938 2.263a3.186 3.186 0 0 1-2.264.937 3.186 3.186 0 0 1-2.263-.937A3.183 3.183 0 0 1 8.803 12c0-.884.357-1.682.938-2.263Z"
+        clip-rule="evenodd"
+      />
+    </svg>
+  );
+}
+
+export function DarkThemeIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill-rule="evenodd"
+        d="M20.983 16.476c.365-.575.548-.862.515-1.09a.615.615 0 0 0-.327-.46c-.204-.107-.623-.009-1.461.187A9 9 0 0 1 8.887 4.29c.197-.837.295-1.256.189-1.46a.615.615 0 0 0-.462-.327c-.227-.033-.514.15-1.09.515A9.743 9.743 0 0 0 3 11.25 9.75 9.75 0 0 0 12.75 21a9.743 9.743 0 0 0 8.233-4.524Z"
+        clip-rule="evenodd"
+      />
+    </svg>
+  );
+}
+
+export function AutoThemeIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill-rule="evenodd"
+        d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10Zm-10 8.2V3.8a8.2 8.2 0 1 0 0 16.4Z"
+        clip-rule="evenodd"
+      />
+    </svg>
+  );
+}

@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Bind Tailwind's `dark:` variant to the .dark class (not the OS media query) */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
     color-scheme: light;
 
@@ -40,6 +43,46 @@
     --overlay: rgb(0 0 0 / 0.35);
 }
 
+.dark {
+    color-scheme: dark;
+
+    /* Neutrals */
+    --background: #1a1a18;
+    --foreground: #e8e8e3;
+    --muted-text: #9a9a93;
+
+    /* Surfaces */
+    --surface: #242422;
+    --surface-hover: #32322e;
+    --surface-muted: #2b2b28;
+    --card: #242422;
+
+    /* Borders */
+    --border: #35352f;
+    --border-subtle: #2a2a27;
+    --border-strong: #4a4a44;
+
+    /* Accent */
+    --accent: #7a9bff;
+    --accent-foreground: #1a1a18;
+    --accent-hover: #93afff;
+    --accent-subtle: #26314d;
+
+    /* Semantic status */
+    --error: #f2837d;
+    --success: #81c784;
+    --warning: #ffb74d;
+    --info: #7a9bff;
+
+    /* Decorative */
+    --rating: #fbbf24;
+    --favorite: #f472b6;
+    --favorite-hover: #f9a8d4;
+
+    /* Overlays */
+    --overlay: rgb(0 0 0 / 0.6);
+}
+
 @theme inline {
     /* Colors */
     --color-background: var(--background);
@@ -74,48 +117,6 @@
     /* Fonts */
     --font-sans: var(--font-geist-sans);
     --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        color-scheme: dark;
-
-        /* Neutrals */
-        --background: #1a1a18;
-        --foreground: #e8e8e3;
-        --muted-text: #9a9a93;
-
-        /* Surfaces */
-        --surface: #242422;
-        --surface-hover: #32322e;
-        --surface-muted: #2b2b28;
-        --card: #242422;
-
-        /* Borders */
-        --border: #35352f;
-        --border-subtle: #2a2a27;
-        --border-strong: #4a4a44;
-
-        /* Accent */
-        --accent: #7a9bff;
-        --accent-foreground: #1a1a18;
-        --accent-hover: #93afff;
-        --accent-subtle: #26314d;
-
-        /* Semantic status */
-        --error: #f2837d;
-        --success: #81c784;
-        --warning: #ffb74d;
-        --info: #7a9bff;
-
-        /* Decorative */
-        --rating: #fbbf24;
-        --favorite: #f472b6;
-        --favorite-hover: #f9a8d4;
-
-        /* Overlays */
-        --overlay: rgb(0 0 0 / 0.6);
-    }
 }
 
 body {

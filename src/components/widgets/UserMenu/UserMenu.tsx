@@ -13,12 +13,12 @@ export function UserMenu() {
 
   // Пока не проверили токен, держим место, чтобы шапка не прыгала.
   if (status === "idle") {
-    return <div className="ml-auto h-9 w-40" aria-hidden />;
+    return <div className="h-9 w-40" aria-hidden />;
   }
 
   if (status === "authenticated" && user) {
     return (
-      <div className="ml-auto flex items-center gap-4">
+      <div className="flex items-center gap-4">
         <Link
           href="/profile"
           className="text-foreground font-medium hover:text-accent transition-colors"
@@ -33,7 +33,7 @@ export function UserMenu() {
   }
 
   return (
-    <div className="ml-auto flex items-center gap-2">
+    <div className="flex items-center gap-2">
       <Button variant="secondary">
         <Link href={`/login?next=${encodeURIComponent(pathname)}`}>Войти</Link>
       </Button>

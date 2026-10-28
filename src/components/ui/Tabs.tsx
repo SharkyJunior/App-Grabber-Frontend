@@ -36,7 +36,7 @@ export function Tabs({ items, className }: TabsProps) {
             className={cn(
               "relative py-4 text-base font-semibold transition-colors",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm",
-              "after:absolute after:left-0 after:right-0 after:bottom-0 after:h-[3px] after:rounded-full after:transition-colors",
+              "after:absolute after:left-0 after:right-0 after:bottom-0 after:h-0.75 after:rounded-full after:transition-colors",
               isActive
                 ? "text-foreground after:bg-accent"
                 : "text-muted-text hover:text-foreground after:bg-transparent",
