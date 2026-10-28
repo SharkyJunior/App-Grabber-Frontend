@@ -195,30 +195,32 @@ function CopyButton({
   }, [value, copiedPopupRef]);
 
   return (
-    <button
-      type="button"
-      aria-label="Скопировать"
-      onClick={() => navigator.clipboard.writeText(value)}
-      className="rounded p-1 text-muted-text transition hover:bg-surface-hover hover:text-foreground"
-    >
-      <svg
-        viewBox="0 0 20 20"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        className="h-5 w-5"
+    <>
+      <button
+        type="button"
+        aria-label="Скопировать"
+        onClick={handleCopy}
+        className="rounded p-1 text-muted-text transition hover:bg-surface-hover hover:text-foreground"
       >
         <svg
           viewBox="0 0 20 20"
           fill="none"
           stroke="currentColor"
           strokeWidth="1.5"
-          className={`h-5 w-5 transition-colors ${
-            isCopied ? "text-green-600" : ""
-          }`}
+          className="h-5 w-5"
         >
-          <rect x="6" y="6" width="10" height="10" rx="1.5" />
-          <path d="M4 14V5a1 1 0 011-1h9" />
+          <svg
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            className={`h-5 w-5 transition-colors ${
+              isCopied ? "text-green-600" : ""
+            }`}
+          >
+            <rect x="6" y="6" width="10" height="10" rx="1.5" />
+            <path d="M4 14V5a1 1 0 011-1h9" />
+          </svg>
         </svg>
       </button>
 
