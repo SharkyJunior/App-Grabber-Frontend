@@ -80,13 +80,13 @@ export function AuthForm({ mode }: AuthFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col gap-4 w-full bg-white border border-[#DCDFD8] rounded-2xl p-6"
+      className="flex flex-col gap-4 w-full bg-card border border-border rounded-2xl p-6"
     >
-      <h1 className="text-black text-2xl font-semibold">
+      <h1 className="text-foreground text-2xl font-semibold">
         {isRegister ? "Регистрация" : "Вход"}
       </h1>
 
-      <label className="flex flex-col gap-1 text-sm font-medium text-black">
+      <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
         Email
         <Input
           type="email"
@@ -100,7 +100,7 @@ export function AuthForm({ mode }: AuthFormProps) {
       </label>
 
       {isRegister && (
-        <label className="flex flex-col gap-1 text-sm font-medium text-black">
+        <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
           Ник
           <Input
             type="text"
@@ -114,7 +114,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         </label>
       )}
 
-      <label className="flex flex-col gap-1 text-sm font-medium text-black">
+      <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
         Пароль
         <Input
           type="password"
@@ -127,7 +127,7 @@ export function AuthForm({ mode }: AuthFormProps) {
           onChange={(e) => setPassword(e.target.value)}
         />
         {isRegister && (
-          <span className="text-xs font-normal text-gray-500">
+          <span className="text-xs font-normal text-muted-text">
             От {MIN_PASSWORD} до {MAX_PASSWORD} символов
           </span>
         )}
@@ -147,9 +147,9 @@ export function AuthForm({ mode }: AuthFormProps) {
             : "Войти"}
       </Button>
 
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-muted-text">
         {isRegister ? "Уже есть аккаунт? " : "Нет аккаунта? "}
-        <Link href={switchHref} className="text-[#1F4FD8] font-medium">
+        <Link href={switchHref} className="text-accent font-medium">
           {isRegister ? "Войти" : "Зарегистрироваться"}
         </Link>
       </p>

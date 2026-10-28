@@ -66,7 +66,7 @@ export default function SearchWidget({
   return (
     <section
       className={cn(
-        "flex flex-col gap-4 rounded-xl border border-[#DCDFD8] bg-white p-6 shadow-sm",
+        "flex flex-col gap-4 rounded-xl border border-border bg-card p-6 shadow-sm",
         className,
       )}
     >
@@ -89,7 +89,7 @@ export default function SearchWidget({
       {error !== null && <Error text={error} />}
 
       <div className="flex flex-row align-middle gap-4">
-        <p className="text-sm text-neutral-600 self-center">Искать в:</p>
+        <p className="text-sm text-muted-text self-center">Искать в:</p>
         <TagSelect
           options={["Google Play", "RuStore"]}
           selected={selectedStores}

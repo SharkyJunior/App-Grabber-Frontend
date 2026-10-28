@@ -7,7 +7,7 @@ export type SpinnerProps = {
 export function Spinner({ className }: SpinnerProps) {
   return (
     <svg
-      className={cn("h-6 w-6 animate-spin text-neutral-400", className)}
+      className={cn("h-6 w-6 animate-spin text-muted-text", className)}
       viewBox="0 0 24 24"
       fill="none"
       aria-label="Загрузка"

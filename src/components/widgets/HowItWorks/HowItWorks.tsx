@@ -13,7 +13,7 @@ export function HowItWorks({
     >
       <h2
         id="how-it-works-heading"
-        className="text-2xl font-bold tracking-tight text-black"
+        className="text-2xl font-bold tracking-tight text-foreground"
       >
         {title}
       </h2>
@@ -23,13 +23,13 @@ export function HowItWorks({
           <li key={i} className="flex items-start gap-6">
             <span
               aria-hidden="true"
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-neutral-900 text-md font-bold text-white"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-foreground text-md font-bold text-background"
             >
               {i + 1}
             </span>
 
-            <p className="pt-1 text-lg leading-snug text-neutral-700">
-              <strong className="font-bold text-black">{step.title}</strong>{" "}
+            <p className="pt-1 text-lg leading-snug text-muted-text">
+              <strong className="font-bold text-foreground">{step.title}</strong>{" "}
               {step.text}
             </p>
           </li>

@@ -30,21 +30,21 @@ export function SessionManager() {
   if (!sessionExpired) return null;
 
   return (
-    <div className="fixed inset-0 z-20 flex items-center justify-center bg-black/30 px-4">
+    <div className="fixed inset-0 z-20 flex items-center justify-center bg-overlay px-4">
       <div
         role="alertdialog"
         aria-modal="true"
         aria-labelledby="session-expired-title"
         aria-describedby="session-expired-text"
-        className="flex flex-col gap-4 w-full max-w-sm bg-white border border-[#DCDFD8] rounded-2xl p-6"
+        className="flex flex-col gap-4 w-full max-w-sm bg-card border border-border rounded-2xl p-6"
       >
         <h2
           id="session-expired-title"
-          className="text-black text-xl font-semibold"
+          className="text-foreground text-xl font-semibold"
         >
           Сессия истекла
         </h2>
-        <p id="session-expired-text" className="text-gray-500">
+        <p id="session-expired-text" className="text-muted-text">
           Войдите снова, чтобы продолжить.
         </p>
         <div className="flex justify-end gap-2">

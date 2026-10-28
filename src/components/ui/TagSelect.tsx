@@ -29,10 +29,10 @@ export function TagSelect({
             aria-pressed={isSelected}
             className={cn(
               "px-4 py-1.5 rounded-full text-sm font-medium transition",
-              "border focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20",
+              "border focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/30",
               isSelected
-                ? "bg-[#E6ECFC] text-black border-[#1F4FD8]"
-                : "bg-white text-neutral-700 border-[#DCDFD8] hover:border-neutral-400",
+                ? "bg-accent-subtle text-accent border-accent"
+                : "bg-card text-foreground border-border hover:border-border-strong",
             )}
           >
             {option}
