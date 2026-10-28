@@ -1,6 +1,20 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/favorites",
+        destination: "/profile/favorites",
+        permanent: true,
+      },
+      {
+        source: "/history",
+        destination: "/profile/history",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     remotePatterns: [new URL("https://play-lh.googleusercontent.com/**")],
   },

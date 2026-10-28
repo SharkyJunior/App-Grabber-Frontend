@@ -56,14 +56,14 @@ export default function HistoryPage() {
   if (!items) return <Spinner />;
 
   return (
-    <main className="flex flex-1 self-center w-full max-w-7xl flex-col items-center justify-start gap-2 py-16 px-16 sm:items-start">
-      <h1 className="text-2xl font-semibold mb-4">История просмотров</h1>
+    <div className="flex w-full flex-col items-center justify-start gap-2 sm:items-start">
+      <h2 className="text-2xl font-semibold mb-4">История просмотров</h2>
       {!items.length && <p className="text-muted-text">Пока нет просмотров.</p>}
       {items.map((v) => (
         <Link
           key={v.id}
           href={`/apps/${v.app.package_name}`}
-          className={`w-full flex items-center justify-between bg-card border-2 border-border rounded-lg p-3 hover:bg-surface-hover `}
+          className={`w-full flex items-center justify-between bg-card border border-border rounded-lg p-3 hover:bg-surface-hover `}
         >
           <div className="flex items-center gap-3">
             <Image
@@ -83,6 +83,6 @@ export default function HistoryPage() {
           </span>
         </Link>
       ))}
-    </main>
+    </div>
   );
 }

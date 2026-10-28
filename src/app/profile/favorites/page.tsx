@@ -53,8 +53,8 @@ export default function FavoritesPage() {
   if (!items) return <Spinner />;
 
   return (
-    <main className="flex flex-1 self-center w-full max-w-7xl flex-col items-center justify-start gap-4 py-16 px-16 sm:items-start">
-      <h1 className="text-2xl font-semibold">Избранное</h1>
+    <div className="flex w-full flex-col items-center justify-start gap-4 sm:items-start">
+      <h2 className="text-2xl font-semibold">Избранное</h2>
       {!items.length && <p className="text-muted-text">Пока пусто.</p>}
       {items.map((f) => (
         <ResultCard
@@ -65,6 +65,6 @@ export default function FavoritesPage() {
           onRemoveFromFavs={handleRemove}
         />
       ))}
-    </main>
+    </div>
   );
 }
