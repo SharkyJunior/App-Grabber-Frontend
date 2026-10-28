@@ -1,6 +1,6 @@
-import { cn } from "@/lib/utils";
+import { cn, pushCurrentHistory } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
-import type { StoreResult } from "./types";
+//import type { StoreResult } from "./types";
 import type { App } from "@/lib/api/apps";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,11 +8,35 @@ import Link from "next/link";
 type ResultCardProps = {
   app: App;
   onCompare?: (app: App) => void;
+  className?: string;
+  variant?: "search" | "favorite";
+  onRemoveFromFavs?: (packageName: string) => void;
 };
 
-export function ResultCard({ app, onCompare }: ResultCardProps) {
+export function ResultCard({
+  app,
+  onCompare,
+  className,
+  variant = "search",
+  onRemoveFromFavs,
+}: ResultCardProps) {
+  const handleCompare = () => {
+    onCompare?.(app);
+    pushCurrentHistory();
+  };
+
+  const handleRemoveFromFavs = () => {
+    onRemoveFromFavs?.(app.package_name);
+    pushCurrentHistory();
+  };
+
   return (
-    <article className="flex flex-col items-start gap-6 rounded-2xl border border-[#DCDFD8] bg-white p-6">
+    <article
+      className={cn(
+        "flex flex-col items-start gap-6 rounded-2xl border border-[#DCDFD8] bg-white p-6",
+        className,
+      )}
+    >
       <div className="flex w-full min-w-0 flex-row gap-5">
         {app.icon_url ? (
           <Image
@@ -60,18 +84,31 @@ export function ResultCard({ app, onCompare }: ResultCardProps) {
         </div>
 
         <div className="flex shrink-0 flex-col gap-2 self-start sm:flex-row sm:items-center">
-          <Link href={`/apps/${app.package_name}`} target="_blank">
+          <Link
+            href={`/apps/${app.package_name}`}
+            //target="_blank"
+            onClick={pushCurrentHistory}
+          >
             <Button className="bg-blue-600 px-6 py-3 text-base font-bold text-white hover:bg-blue-700">
               Открыть
             </Button>
           </Link>
 
           <Button
-            onClick={() => onCompare?.(app)}
+            onClick={handleCompare}
             className="border border-blue-600 bg-white px-6 py-3 text-base font-bold text-blue-600 hover:bg-blue-50"
           >
             Сравнить
           </Button>
+
+          {variant === "favorite" && (
+            <Button
+              onClick={handleRemoveFromFavs}
+              className="border border-red-600 bg-white px-6 py-3 text-base font-bold text-red-600 hover:bg-blue-50"
+            >
+              Удалить
+            </Button>
+          )}
         </div>
       </div>
 
@@ -84,42 +121,44 @@ export function ResultCard({ app, onCompare }: ResultCardProps) {
   );
 }
 
-function StorePill({ store }: { store: StoreResult }) {
-  const { name, status } = store;
+// TODO: implement this when multiple sources are supported
+//
+// function StorePill({ store }: { store: StoreResult }) {
+//   const { name, status } = store;
 
-  const base =
-    "inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium";
+//   const base =
+//     "inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium";
 
-  if (status === "found") {
-    return (
-      <span className={cn(base, "border border-emerald-600 text-emerald-700")}>
-        <span className="h-2.5 w-2.5 rounded-full bg-emerald-600" />
-        {name} · найдено
-      </span>
-    );
-  }
+//   if (status === "found") {
+//     return (
+//       <span className={cn(base, "border border-emerald-600 text-emerald-700")}>
+//         <span className="h-2.5 w-2.5 rounded-full bg-emerald-600" />
+//         {name} · найдено
+//       </span>
+//     );
+//   }
 
-  if (status === "searching") {
-    return (
-      <span
-        className={cn(
-          base,
-          "border border-dashed border-neutral-400 text-neutral-500",
-        )}
-      >
-        <DiamondIcon className="h-3.5 w-3.5" />
-        {name} · ищем...
-      </span>
-    );
-  }
+//   if (status === "searching") {
+//     return (
+//       <span
+//         className={cn(
+//           base,
+//           "border border-dashed border-neutral-400 text-neutral-500",
+//         )}
+//       >
+//         <DiamondIcon className="h-3.5 w-3.5" />
+//         {name} · ищем...
+//       </span>
+//     );
+//   }
 
-  return (
-    <span className={cn(base, "border border-neutral-300 text-neutral-400")}>
-      <span className="h-2.5 w-2.5 rounded-full bg-neutral-300" />
-      {name} · не найдено
-    </span>
-  );
-}
+//   return (
+//     <span className={cn(base, "border border-neutral-300 text-neutral-400")}>
+//       <span className="h-2.5 w-2.5 rounded-full bg-neutral-300" />
+//       {name} · не найдено
+//     </span>
+//   );
+// }
 
 function StarIcon({ className }: { className?: string }) {
   return (
@@ -129,16 +168,16 @@ function StarIcon({ className }: { className?: string }) {
   );
 }
 
-function DiamondIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 20 20"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      className={className}
-    >
-      <path d="M10 2l6 8-6 8-6-8 6-8z" />
-    </svg>
-  );
-}
+// function DiamondIcon({ className }: { className?: string }) {
+//   return (
+//     <svg
+//       viewBox="0 0 20 20"
+//       fill="none"
+//       stroke="currentColor"
+//       strokeWidth="1.5"
+//       className={className}
+//     >
+//       <path d="M10 2l6 8-6 8-6-8 6-8z" />
+//     </svg>
+//   );
+// }

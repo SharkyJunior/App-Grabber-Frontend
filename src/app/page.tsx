@@ -2,69 +2,14 @@
 
 import { PromptSelect } from "@/components/ui/PromptSelect";
 import { HowItWorks } from "@/components/widgets/HowItWorks";
-import { AppResult, ResultsWidget } from "@/components/widgets/ResultsWidget";
+import { ResultsWidget } from "@/components/widgets/ResultsWidget";
 import SearchWidget from "@/components/widgets/SearchWidget/SearchWidget";
 import { isValidPackageName } from "@/lib/utils";
 import { useSearchStore } from "@/stores/useSearchStore";
 import { useRouter } from "next/navigation";
 
-const mock: AppResult[] = [
-  {
-    id: "uchi",
-    name: "Учи.ру",
-    company: 'ООО "Учи.ру"',
-    package: "com.uchi.app",
-    category: "Образование",
-    rating: 4.2,
-    letter: "У",
-    stores: [
-      { name: "Google Play", status: "found" },
-      { name: "RuStore", status: "searching" },
-    ],
-  },
-  {
-    id: "uchi2",
-    name: "Учи.ру",
-    company: 'ООО "Учи.ру"',
-    package: "com.uchi.app",
-    category: "Образование",
-    rating: 4.2,
-    letter: "У",
-    stores: [
-      { name: "Google Play", status: "found" },
-      { name: "RuStore", status: "searching" },
-    ],
-  },
-  {
-    id: "uchi3",
-    name: "Учи.ру",
-    company: 'ООО "Учи.ру"',
-    package: "com.uchi.app",
-    category: "Образование",
-    rating: 4.2,
-    letter: "У",
-    stores: [
-      { name: "Google Play", status: "found" },
-      { name: "RuStore", status: "searching" },
-    ],
-  },
-  {
-    id: "uchi4",
-    name: "Учи.ру",
-    company: 'ООО "Учи.ру"',
-    package: "com.uchi.app",
-    category: "Образование",
-    rating: 4.2,
-    letter: "У",
-    stores: [
-      { name: "Google Play", status: "found" },
-      { name: "RuStore", status: "searching" },
-    ],
-  },
-];
-
 export default function Home() {
-  const { queryHistory, runSearch, setQuery } = useSearchStore();
+  const { queryHistory, runSearch, setQuery, clearHistory } = useSearchStore();
   const router = useRouter();
 
   return (
@@ -90,6 +35,7 @@ export default function Home() {
               runSearch(p);
             }
           }}
+          onClearHistory={clearHistory}
         />
       )}
 

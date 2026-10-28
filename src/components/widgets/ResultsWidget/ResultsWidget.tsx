@@ -16,7 +16,11 @@ export function ResultsWidget({ className }: { className?: string }) {
   }
 
   if (searchError) {
-    return <p className="py-8 text-center text-neutral-500">{searchError}</p>;
+    return (
+      <p className={cn("py-8 text-center text-neutral-500", className)}>
+        {searchError}
+      </p>
+    );
   }
 
   if (!searchResult || searchResult?.results.length === 0)
