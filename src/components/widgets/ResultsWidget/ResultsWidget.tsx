@@ -17,7 +17,7 @@ export function ResultsWidget({ className }: { className?: string }) {
 
   if (searchError) {
     return (
-      <p className={cn("py-8 text-center text-neutral-500", className)}>
+      <p className={cn("py-8 text-center text-muted-text", className)}>
         {searchError}
       </p>
     );
@@ -26,7 +26,7 @@ export function ResultsWidget({ className }: { className?: string }) {
   if (!searchResult || searchResult?.results.length === 0)
     return (
       <h3
-        className={cn("p-5 px-10 gap-2 text-[20px] text-gray-500", className)}
+        className={cn("p-5 px-10 gap-2 text-[20px] text-muted-text", className)}
       >
         Введите запрос и начните поиск. Здесь появятся результаты
       </h3>
@@ -44,7 +44,7 @@ export function ResultsWidget({ className }: { className?: string }) {
 function Spinner() {
   return (
     <svg
-      className="h-8 w-8 animate-spin text-neutral-400"
+      className="h-8 w-8 animate-spin text-muted-text"
       viewBox="0 0 24 24"
       fill="none"
       aria-label="Загрузка"

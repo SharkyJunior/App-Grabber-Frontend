@@ -1,29 +1,125 @@
 @import "tailwindcss";
 
+/* Bind Tailwind's `dark:` variant to the .dark class (not the OS media query) */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-    --background: #f3f4f1;
-    --foreground: #171717;
+    color-scheme: light;
+
+    /* Neutrals */
+    --background: #f7f7f5;
+    --foreground: #1c1c1a;
+    --muted-text: #6b6b66;
+
+    /* Surfaces */
+    --surface: #efefec;
+    --surface-hover: #e6e6e2;
+    --surface-muted: #f2f2ef;
+    --card: #ffffff;
+
+    /* Borders */
+    --border: #dcdcd7;
+    --border-subtle: #e9e9e5;
+    --border-strong: #c4c4be;
+
+    /* Accent */
+    --accent: #1f4fd8;
+    --accent-foreground: #f7f7f5;
+    --accent-hover: #1a44bb;
+    --accent-subtle: #e6ecfc;
+
+    /* Semantic status */
+    --error: #b3261e;
+    --success: #2e7d32;
+    --warning: #b26a00;
+    --info: #1f4fd8;
+
+    /* Decorative */
+    --rating: #d97706;
+    --favorite: #ec4899;
+    --favorite-hover: #db2777;
+
+    /* Overlays */
+    --overlay: rgb(0 0 0 / 0.35);
+}
+
+.dark {
+    color-scheme: dark;
+
+    /* Neutrals */
+    --background: #1a1a18;
+    --foreground: #e8e8e3;
+    --muted-text: #9a9a93;
+
+    /* Surfaces */
+    --surface: #242422;
+    --surface-hover: #32322e;
+    --surface-muted: #2b2b28;
+    --card: #242422;
+
+    /* Borders */
+    --border: #35352f;
+    --border-subtle: #2a2a27;
+    --border-strong: #4a4a44;
+
+    /* Accent */
+    --accent: #7a9bff;
+    --accent-foreground: #1a1a18;
+    --accent-hover: #93afff;
+    --accent-subtle: #26314d;
+
+    /* Semantic status */
+    --error: #f2837d;
+    --success: #81c784;
+    --warning: #ffb74d;
+    --info: #7a9bff;
+
+    /* Decorative */
+    --rating: #fbbf24;
+    --favorite: #f472b6;
+    --favorite-hover: #f9a8d4;
+
+    /* Overlays */
+    --overlay: rgb(0 0 0 / 0.6);
 }
 
 @theme inline {
+    /* Colors */
     --color-background: var(--background);
     --color-foreground: var(--foreground);
+    --color-muted-text: var(--muted-text);
+
+    --color-surface: var(--surface);
+    --color-surface-hover: var(--surface-hover);
+    --color-surface-muted: var(--surface-muted);
+    --color-card: var(--card);
+
+    --color-border: var(--border);
+    --color-border-subtle: var(--border-subtle);
+    --color-border-strong: var(--border-strong);
+
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-accent-hover: var(--accent-hover);
+    --color-accent-subtle: var(--accent-subtle);
+
+    --color-error: var(--error);
+    --color-success: var(--success);
+    --color-warning: var(--warning);
+    --color-info: var(--info);
+
+    --color-rating: var(--rating);
+    --color-favorite: var(--favorite);
+    --color-favorite-hover: var(--favorite-hover);
+
+    --color-overlay: var(--overlay);
+
+    /* Fonts */
     --font-sans: var(--font-geist-sans);
     --font-mono: var(--font-geist-mono);
-
-    --color-error: #a3262a;
-    --color-muted-text: #808080;
 }
-
-/*@media (prefers-color-scheme: dark) {
-    :root {
-        --background: #0a0a0a;
-        --foreground: #ededed;
-    }
-}*/
 
 body {
     background: var(--background);
     color: var(--foreground);
-    font-family: Arial, Helvetica, sans-serif;
 }

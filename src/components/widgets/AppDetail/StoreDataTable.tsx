@@ -13,22 +13,22 @@ export function StoreDataTable({
   return (
     <section
       className={cn(
-        "rounded-2xl border border-[#DCDFD8] bg-white p-8",
+        "rounded-2xl border border-border bg-card p-8",
         className,
       )}
     >
-      <h2 className="mb-6 border-b border-[#ECEEEA] pb-4 text-2xl font-bold text-black">
+      <h2 className="mb-6 border-b border-border-subtle pb-4 text-2xl font-bold text-foreground">
         Данные из магазина
       </h2>
 
-      <dl className="divide-y divide-[#ECEEEA]">
+      <dl className="divide-y divide-border-subtle">
         <Row label="Название">{data.name}</Row>
         <Row label="Разработчик">{data.developer}</Row>
         <Row label="Категория">{data.category}</Row>
         <Row label="Возраст">{data.age_rating}</Row>
         <Row label="Оценка">
           <span className="inline-flex items-center gap-2">
-            <StarIcon className="h-4 w-4 text-amber-500" />
+            <StarIcon className="h-4 w-4 text-rating" />
             {data.rating.toString().replace(".", ",")} из {MAX_RATING}
           </span>
         </Row>
@@ -40,13 +40,13 @@ export function StoreDataTable({
             href={data.store_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="break-all text-blue-600 hover:underline"
+            className="break-all text-accent hover:underline"
           >
             {data.store_url}
           </a>
         </Row>
         <Row label="Иконка">
-          <span className="break-all font-mono text-sm text-neutral-700">
+          <span className="break-all font-mono text-sm text-muted-text">
             {data.icon_url}
           </span>
         </Row>
@@ -64,8 +64,8 @@ function Row({
 }) {
   return (
     <div className="grid grid-cols-3 gap-4 py-4">
-      <dt className="text-base text-neutral-500">{label}</dt>
-      <dd className="col-span-2 text-base text-black">{children}</dd>
+      <dt className="text-base text-muted-text">{label}</dt>
+      <dd className="col-span-2 text-base text-foreground">{children}</dd>
     </div>
   );
 }

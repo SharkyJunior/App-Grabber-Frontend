@@ -59,7 +59,7 @@ export function FavoriteButton({ packageName }: Props) {
   return (
     <Button
       iconOnly
-      className="flex items-center justify-center bg-transparent text-pink-500 hover:bg-transparent hover:text-pink-400"
+      className="flex items-center justify-center bg-transparent text-favorite hover:bg-transparent hover:text-favorite-hover"
       onClick={toggle}
       disabled={isFavorite == null || busy}
       aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
