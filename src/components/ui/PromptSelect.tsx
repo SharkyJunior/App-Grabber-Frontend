@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 export type PromptSelectProps = {
   title?: string;
   onSelect?: (prompt: string) => void;
+  onClearHistory?: () => void;
   prompts?: string[];
   className?: string;
 };
@@ -12,6 +13,7 @@ export function PromptSelect({
   onSelect,
   prompts,
   className,
+  onClearHistory,
 }: PromptSelectProps) {
   return (
     <div className={cn("flex flex-wrap gap-4 mb-4 px-1", className)}>
@@ -28,6 +30,12 @@ export function PromptSelect({
           </button>
         );
       })}
+      <p
+        className="text-blue-700 underline cursor-pointer hover:text-blue-500 self-center mx-2"
+        onClick={onClearHistory}
+      >
+        Очистить историю
+      </p>
     </div>
   );
 }

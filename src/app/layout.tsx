@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Tabs } from "@/components/ui/Tabs";
+import { SessionManager } from "@/components/widgets/SessionManager/SessionManager";
+import { UserMenu } from "@/components/widgets/UserMenu/UserMenu";
 import { Suspense } from "react";
 
 const geistSans = Geist({
@@ -34,7 +36,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#F3F4F1] font-sans justify-center">
+      <body className="min-h-full flex flex-col bg-[#F3F4F1] font-sans">
         <header className="flex align-middle justify-center sticky top-0 z-10 bg-white h-16 border border-[#DCDFD8] px-16">
           <div className="flex flex-1 gap-10 w-fit max-w-7xl px-16">
             <div className="flex flex-row gap-4 align-middle">
@@ -54,9 +56,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <Suspense fallback={null}>
               <Tabs items={NAV_ITEMS} />
             </Suspense>
+            <UserMenu />
           </div>
         </header>
         {children}
+        <SessionManager />
 
         <footer></footer>
       </body>
