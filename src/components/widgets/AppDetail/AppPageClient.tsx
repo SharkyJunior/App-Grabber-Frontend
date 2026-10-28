@@ -1,19 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { authFetch } from "@/lib/api/authFetch";
 import type { App } from "@/lib/api/apps";
 import { Spinner } from "@/components/ui/Spinner";
 import { Error as ErrorView } from "@/components/ui/Error";
 import { AppHeader } from "./AppHeader";
 import { AppDetailView } from "./AppDetailView";
+import { useRouter } from "next/navigation";
 
 type Props = {
   packageName: string;
 };
 
 export function AppPageClient({ packageName }: Props) {
+  const router = useRouter();
   const [app, setApp] = useState<App | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -73,12 +74,13 @@ export function AppPageClient({ packageName }: Props) {
 
   return (
     <main className="mx-auto w-full max-w-6xl px-16 py-8">
-      <Link
-        href="/"
+      <div
+        onClick={() => router.back()}
         className="mb-4 inline-flex items-center gap-2 text-base text-blue-600 hover:underline"
       >
-        <ChevronLeft className="h-4 w-4" />К результатам
-      </Link>
+        <ChevronLeft className="h-4 w-4" />
+        Назад
+      </div>
 
       <AppHeader
         name={app.name}

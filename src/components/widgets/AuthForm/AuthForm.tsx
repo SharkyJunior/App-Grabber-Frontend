@@ -12,12 +12,11 @@ type AuthFormProps = {
   mode: "login" | "register";
 };
 
-const MIN_PASSWORD = 15;
+const MIN_PASSWORD = 10;
 const MAX_PASSWORD = 32;
 const MAX_NICKNAME = 50;
 const MAX_EMAIL = 254;
 
-// Принимаем только внутренние пути, иначе ?next= — открытый редирект.
 function safeNextPath(next: string | null): string {
   if (!next || !next.startsWith("/") || next.startsWith("//")) return "/";
   if (next.startsWith("/login") || next.startsWith("/register")) return "/";

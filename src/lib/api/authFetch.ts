@@ -3,6 +3,8 @@
 // Вход и регистрацию через неё НЕ делаем: там 401 значит «неверный пароль».
 import { useAuthStore } from "@/stores/useAuthStore";
 
+export const authEvents = new EventTarget();
+
 export async function authFetch(
   input: RequestInfo | URL,
   init: RequestInit = {},
@@ -14,6 +16,9 @@ export async function authFetch(
 
   const res = await fetch(input, { ...init, headers });
 
-  if (res.status === 401 && token) handleUnauthorized(token);
+  if (res.status === 401) {
+    if (token) handleUnauthorized(token);
+    authEvents.dispatchEvent(new CustomEvent("unauthorized"));
+  }
   return res;
 }

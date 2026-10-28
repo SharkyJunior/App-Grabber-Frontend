@@ -43,3 +43,9 @@ export function formatRussianRelative(dateString: string): string {
     minute: "2-digit",
   });
 }
+
+export function pushCurrentHistory() {
+  if (typeof window !== "undefined") {
+    window.history.pushState(null, "", window.location.href);
+  }
+}
