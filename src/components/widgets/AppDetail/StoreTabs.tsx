@@ -35,7 +35,7 @@ export function StoreTabs({
             onClick={() => onChange(store.value)}
             className={cn(
               "relative py-4 text-lg font-semibold transition-colors",
-              "after:absolute after:left-0 after:right-0 after:-bottom-px after:h-0.75 after:rounded-full after:transition-colors",
+              "after:absolute after:left-0 after:right-0 after:-bottom-px after:h-0.75 after:rounded-full after:transition-colors hover:cursor-pointer",
               isActive
                 ? "text-foreground after:bg-accent"
                 : "text-muted-text hover:text-foreground after:bg-transparent",

@@ -17,11 +17,15 @@ export type AppSearchResult = {
 };
 
 export async function getApp(
+  storeName: string,
   packageName: string,
   headers: HeadersInit = {},
 ): Promise<App | null> {
+  console.log(
+    `fetching ${API_BASE}/api/apps/${encodeURIComponent(storeName)}/${encodeURIComponent(packageName)}`,
+  );
   const res = await fetch(
-    `${API_BASE}/api/apps/${encodeURIComponent(packageName)}`,
+    `${API_BASE}/api/apps/${encodeURIComponent(storeName)}/${encodeURIComponent(packageName)}`,
     { cache: "no-store", headers },
   );
 

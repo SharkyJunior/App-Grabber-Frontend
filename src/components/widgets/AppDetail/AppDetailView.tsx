@@ -24,7 +24,7 @@ export function AppDetailView({ stores }: { stores: StoreEntry[] }) {
         active={active}
         onChange={setActive}
       />
-      <StoreDataTable data={current.app} />
+      <StoreDataTable data={current.app} storeName={current.label} />
     </div>
   );
 }

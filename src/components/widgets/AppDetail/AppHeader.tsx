@@ -85,7 +85,7 @@ export function AppHeader({
   availableStore,
   onExportJson,
   onCompare,
-  compareLabel = "Сравнить",
+  compareLabel = "Посмотреть в разных магазинах",
   className,
 }: AppHeaderProps) {
   useCopyAnimationStyles();
@@ -146,12 +146,12 @@ export function AppHeader({
         >
           Экспорт JSON
         </Button>
-        <Button
+        {/*<Button
           onClick={onCompare}
           className="border-2 border-accent bg-card px-6 py-3 text-base font-bold text-accent hover:bg-accent-subtle"
         >
           {compareLabel}
-        </Button>
+        </Button>*/}
       </div>
     </section>
   );

@@ -8,43 +8,100 @@ import { Error as ErrorView } from "@/components/ui/Error";
 import { AppHeader } from "./AppHeader";
 import { AppDetailView } from "./AppDetailView";
 import { useRouter } from "next/navigation";
+import { StoreKind } from "./types";
 
 type Props = {
   packageName: string;
 };
 
+type AppFromStore = {
+  store: StoreKind;
+  data: App;
+};
+
+type Result = {
+  packageName: string;
+  apps: AppFromStore[];
+  notFound: boolean;
+  error: string | null;
+};
+
+const STORE_LABELS: Record<StoreKind, string> = {
+  google_play: "Google Play",
+  rustore: "RuStore",
+};
+
 export function AppPageClient({ packageName }: Props) {
   const router = useRouter();
-  const [app, setApp] = useState<App | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [notFound, setNotFound] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [result, setResult] = useState<Result | null>(null);
+
+  const isCurrent = result?.packageName === packageName;
+  const loading = !isCurrent;
+  const apps = isCurrent ? result!.apps : [];
+  const notFound = isCurrent ? result!.notFound : false;
+  const error = isCurrent ? result!.error : null;
 
   useEffect(() => {
     let cancelled = false;
+    const controller = new AbortController();
 
-    authFetch(`/api/apps/${encodeURIComponent(packageName)}`, {
-      cache: "no-store",
-    })
-      .then(async (res) => {
-        if (cancelled) return;
-        if (res.status === 404) {
-          setNotFound(true);
-          return;
-        }
-        if (!res.ok) throw new Error(`apps: ${res.status}`);
-        const data = (await res.json()) as App;
-        if (!cancelled) setApp(data);
-      })
-      .catch((e: Error) => {
-        if (!cancelled) setError(e.message);
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
+    const stores: readonly StoreKind[] = ["google_play", "rustore"];
+
+    async function load() {
+      const results = await Promise.allSettled(
+        stores.map(async (store) => {
+          const res = await authFetch(
+            `/api/apps/${store}/${encodeURIComponent(packageName)}`,
+            { cache: "no-store", signal: controller.signal },
+          );
+          if (res.status === 404) return null;
+          if (!res.ok) throw new Error(`apps: ${res.status}`);
+          const data = (await res.json()) as App;
+          return { store, data };
+        }),
+      );
+
+      if (cancelled) return;
+
+      const found = results
+        .filter(
+          (r): r is PromiseFulfilledResult<AppFromStore | null> =>
+            r.status === "fulfilled",
+        )
+        .map((r) => r.value)
+        .filter((v): v is AppFromStore => v !== null);
+
+      const failures = results.filter(
+        (r): r is PromiseRejectedResult => r.status === "rejected",
+      );
+
+      if (failures.length > 0) {
+        const reason = failures[0].reason;
+        setResult({
+          packageName,
+          apps: [],
+          notFound: false,
+          error:
+            reason instanceof Error && reason.message
+              ? reason.message
+              : "request failed",
+        });
+        return;
+      }
+
+      if (found.length === 0) {
+        setResult({ packageName, apps: [], notFound: true, error: null });
+        return;
+      }
+
+      setResult({ packageName, apps: found, notFound: false, error: null });
+    }
+
+    load();
 
     return () => {
       cancelled = true;
+      controller.abort();
     };
   }, [packageName]);
 
@@ -64,13 +121,17 @@ export function AppPageClient({ packageName }: Props) {
     );
   }
 
-  if (error || !app) {
+  if (error !== null) {
     return (
       <main className="mx-auto w-full max-w-6xl px-16 py-8">
-        <ErrorView text={error ?? "Не удалось загрузить приложение"} />
+        <ErrorView text={error} />
       </main>
     );
   }
+
+  // Safe: we passed loading, notFound, and error guards, which means
+  // setResult was called with the success branch → apps.length > 0.
+  const primary = apps[0];
 
   return (
     <main className="mx-auto w-full max-w-6xl px-16 py-8">
@@ -78,22 +139,26 @@ export function AppPageClient({ packageName }: Props) {
         onClick={() => router.back()}
         className="mb-4 inline-flex items-center gap-2 text-base text-accent hover:underline cursor-pointer"
       >
-        <ChevronLeft className="h-4 w-4 " />
+        <ChevronLeft className="h-4 w-4" />
         Назад
       </div>
 
       <AppHeader
-        name={app.name}
-        developer={app.developer}
-        package_name={app.package_name}
-        letter={app.name.charAt(0).toUpperCase()}
-        iconUrl={app.icon_url}
-        availableStore="Google Play"
+        name={primary.data.name}
+        developer={primary.data.developer}
+        package_name={primary.data.package_name}
+        letter={primary.data.name.charAt(0).toUpperCase()}
+        iconUrl={primary.data.icon_url}
+        availableStore={STORE_LABELS[primary.store]}
       />
 
       <div className="mt-8">
         <AppDetailView
-          stores={[{ kind: "google-play", label: "Google Play", app }]}
+          stores={apps.map((app) => ({
+            kind: app.store,
+            label: STORE_LABELS[app.store],
+            app: app.data,
+          }))}
         />
       </div>
     </main>

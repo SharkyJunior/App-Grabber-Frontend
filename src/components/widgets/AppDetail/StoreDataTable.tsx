@@ -6,19 +6,18 @@ const MAX_RATING = 5;
 export function StoreDataTable({
   data,
   className,
+  storeName,
 }: {
   data: App;
   className?: string;
+  storeName?: string;
 }) {
   return (
     <section
-      className={cn(
-        "rounded-2xl border border-border bg-card p-8",
-        className,
-      )}
+      className={cn("rounded-2xl border border-border bg-card p-8", className)}
     >
       <h2 className="mb-6 border-b border-border-subtle pb-4 text-2xl font-bold text-foreground">
-        Данные из магазина
+        Данные из {storeName || "магазина"}
       </h2>
 
       <dl className="divide-y divide-border-subtle">
