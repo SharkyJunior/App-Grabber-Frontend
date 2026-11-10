@@ -11,7 +11,7 @@ export function UserMenu() {
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
 
-  // Пока не проверили токен, держим место, чтобы шапка не прыгала.
+  // Пока не проверили сессию, держим место, чтобы шапка не прыгала.
   if (status === "idle") {
     return <div className="h-9 w-40" aria-hidden />;
   }

@@ -76,9 +76,9 @@ export function AppPageClient({ packageName }: Props) {
     <main className="mx-auto w-full max-w-6xl px-16 py-8">
       <div
         onClick={() => router.back()}
-        className="mb-4 inline-flex items-center gap-2 text-base text-accent hover:underline"
+        className="mb-4 inline-flex items-center gap-2 text-base text-accent hover:underline cursor-pointer"
       >
-        <ChevronLeft className="h-4 w-4" />
+        <ChevronLeft className="h-4 w-4 " />
         Назад
       </div>
 

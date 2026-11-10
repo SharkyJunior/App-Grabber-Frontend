@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { Button } from "@/components/ui/Button";
 import { useAuthStore } from "@/stores/useAuthStore";
 
-// Проверяет сохранённый токен при загрузке и показывает диалог при 401.
+// Проверяет cookie-сессию при загрузке и показывает диалог при 401.
 export function SessionManager() {
   const router = useRouter();
   const pathname = usePathname();

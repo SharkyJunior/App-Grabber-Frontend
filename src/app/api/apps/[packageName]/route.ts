@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getApp } from "@/lib/api/apps";
 import { ApiError } from "@/lib/api/client";
-import { errorResponse } from "@/lib/api/route";
+import { errorResponse, upstreamHeaders } from "@/lib/api/route";
 
 export async function GET(
   req: Request,
@@ -12,7 +12,7 @@ export async function GET(
   try {
     const app = await getApp(
       decodeURIComponent(packageName),
-      req.headers.get("authorization"),
+      upstreamHeaders(req),
     );
 
     if (!app) {

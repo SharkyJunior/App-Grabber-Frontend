@@ -1,4 +1,4 @@
-import { API_BASE, authHeader, readError } from "./client";
+import { API_BASE, readError } from "./client";
 
 export type App = {
   package_name: string;
@@ -18,11 +18,11 @@ export type AppSearchResult = {
 
 export async function getApp(
   packageName: string,
-  authorization?: string | null,
+  headers: HeadersInit = {},
 ): Promise<App | null> {
   const res = await fetch(
     `${API_BASE}/api/apps/${encodeURIComponent(packageName)}`,
-    { cache: "no-store", headers: authHeader(authorization) },
+    { cache: "no-store", headers },
   );
 
   if (res.status === 404) return null;
@@ -35,11 +35,11 @@ export async function getApp(
 
 export async function search(
   query: string,
-  authorization?: string | null,
+  headers: HeadersInit = {},
 ): Promise<AppSearchResult | null> {
   const res = await fetch(
     `${API_BASE}/api/search?q=${encodeURIComponent(query)}`,
-    { cache: "no-store", headers: authHeader(authorization) },
+    { cache: "no-store", headers },
   );
 
   if (res.status === 401) throw await readError(res);

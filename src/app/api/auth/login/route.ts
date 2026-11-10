@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { login, type LoginInput } from "@/lib/api/auth";
-import { errorResponse } from "@/lib/api/route";
+import { errorResponse, passthrough, upstreamHeaders } from "@/lib/api/route";
 
 export async function POST(req: Request) {
   let body: unknown;
@@ -11,8 +11,8 @@ export async function POST(req: Request) {
   }
 
   try {
-    const data = await login(body as LoginInput);
-    return NextResponse.json(data);
+    const upstream = await login(body as LoginInput, upstreamHeaders(req));
+    return passthrough(upstream);
   } catch (e) {
     return errorResponse(e);
   }
