@@ -9,6 +9,7 @@ import { UserMenu } from "@/components/widgets/UserMenu/UserMenu";
 import { Suspense } from "react";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { ToastProvider } from "@/components/widgets/ToastProvider/ToastProvider";
+import { ThemeInitScript } from "@/components/widgets/ThemeInitScript/ThemeInitScript";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,10 +47,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-      </head>
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans">
+        <ThemeInitScript script={themeScript} />
         <header className="sticky top-0 z-10 h-16 bg-surface border-b border-border">
           <div className="mx-auto flex h-full w-full max-w-7xl items-center gap-10 px-4 sm:px-8 lg:px-16">
             <div className="flex items-center gap-4">

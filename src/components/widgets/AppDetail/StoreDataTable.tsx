@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, type ReactNode } from "react";
+import { Fragment, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import type { App } from "@/lib/api/apps";
 import { StoreTabs } from "./StoreTabs";
@@ -15,9 +15,10 @@ export type StoreColumn = {
 };
 
 type Field = {
-  key: string;
+  key: keyof App;
   label: string;
   render: (app: App) => ReactNode;
+  ignoreComparison?: boolean;
 };
 
 const FIELDS: Field[] = [
@@ -53,6 +54,7 @@ const FIELDS: Field[] = [
         {app.store_url}
       </a>
     ),
+    ignoreComparison: true,
   },
   {
     key: "icon_url",
@@ -62,6 +64,7 @@ const FIELDS: Field[] = [
         {app.icon_url}
       </span>
     ),
+    ignoreComparison: true,
   },
 ];
 
@@ -82,11 +85,18 @@ export function StoreDataTable({
   onRemove: (index: number) => void;
   className?: string;
 }) {
+  const [highlightDiffs, setHighlightDiffs] = useState<boolean>(false);
   if (columns.length === 0) return null;
 
   const isSingle = columns.length === 1;
   const showAdd = allStores.length > 1;
   const tabs = allStores.map((s) => ({ value: s.kind, label: s.label }));
+
+  const isDiscrepant = (field: Field) => {
+    if (!highlightDiffs || isSingle || field.ignoreComparison) return;
+    const values = columns.map((col) => String(col.app[field.key] ?? ""));
+    return new Set(values).size > 1;
+  };
 
   return (
     <section
@@ -100,22 +110,53 @@ export function StoreDataTable({
           {isSingle ? `Данные из ${columns[0].label}` : "Сравнение магазинов"}
         </h2>
 
-        {showAdd && (
-          <button
-            type="button"
-            onClick={onAdd}
-            disabled={!canAdd}
-            className={cn(
-              "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors",
-              canAdd
-                ? "border-border text-foreground hover:cursor-pointer hover:border-accent hover:text-accent"
-                : "cursor-not-allowed border-border-subtle text-muted-text opacity-50",
-            )}
-          >
-            <span className="text-base leading-none">+</span>
-            Добавить колонку
-          </button>
-        )}
+        <div className="flex items-center gap-3">
+          {!isSingle && (
+            <button
+              type="button"
+              onClick={() => setHighlightDiffs(!highlightDiffs)}
+              className={cn(
+                "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors",
+                highlightDiffs
+                  ? "border-error-border bg-error-subtle text-error"
+                  : "border-border text-muted-text hover:cursor-pointer hover:border-accent hover:text-foreground",
+              )}
+            >
+              {/* Toggle Switch Graphic */}
+              <div
+                className={cn(
+                  "relative h-4 w-7 rounded-full transition-colors",
+                  highlightDiffs ? "bg-error" : "bg-border-strong",
+                )}
+              >
+                <div
+                  className={cn(
+                    "absolute left-0.5 top-0.5 h-3 w-3 rounded-full bg-white transition-transform",
+                    highlightDiffs && "translate-x-3",
+                  )}
+                />
+              </div>
+              Подсветка различий
+            </button>
+          )}
+
+          {showAdd && (
+            <button
+              type="button"
+              onClick={onAdd}
+              disabled={!canAdd}
+              className={cn(
+                "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors",
+                canAdd
+                  ? "border-border text-foreground hover:cursor-pointer hover:border-accent hover:text-accent"
+                  : "cursor-not-allowed border-border-subtle text-muted-text opacity-50",
+              )}
+            >
+              <span className="text-base leading-none">+</span>
+              Добавить колонку
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="relative">
@@ -158,21 +199,35 @@ export function StoreDataTable({
           )}
 
           {/* data rows */}
-          {FIELDS.map((field) => (
-            <Fragment key={field.key}>
-              <dt className="border-b border-border-subtle py-4 pr-4 text-base text-muted-text">
-                {field.label}
-              </dt>
-              {columns.map((column) => (
-                <dd
-                  key={column.kind}
-                  className="min-w-0 wrap-break-word border-b border-border-subtle py-4 text-base text-foreground"
+          {FIELDS.map((field) => {
+            const showRed = isDiscrepant(field);
+
+            return (
+              <Fragment key={field.key}>
+                <dt
+                  className={cn(
+                    "border-b border-border-subtle py-4 pr-4 text-base text-muted-text",
+                    showRed &&
+                      "border-b-error-border bg-error-subtle text-error z-100",
+                  )}
                 >
-                  {field.render(column.app)}
-                </dd>
-              ))}
-            </Fragment>
-          ))}
+                  {field.label}
+                </dt>
+                {columns.map((column) => (
+                  <dd
+                    key={column.kind}
+                    className={cn(
+                      "min-w-0 wrap-break-word border-b border-border-subtle py-4 text-base text-foreground",
+                      showRed &&
+                        "border-b-error-border bg-error-subtle text-error z-100",
+                    )}
+                  >
+                    {field.render(column.app)}
+                  </dd>
+                ))}
+              </Fragment>
+            );
+          })}
         </dl>
 
         {/* hover-to-add strip on the right edge */}
