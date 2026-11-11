@@ -14,8 +14,11 @@ export function ResultsWidget({ className }: { className?: string }) {
   useEffect(() => {
     if (!isSearching && !searchError && searchResult?.results.length === 1) {
       router.push(`/apps/${searchResult.results[0].package_name}`);
-      clearResults();
-      setQuery("");
+
+      setTimeout(() => {
+        clearResults();
+        setQuery("");
+      }, 100);
     }
   }, [searchResult, isSearching, searchError, clearResults, setQuery, router]);
 
