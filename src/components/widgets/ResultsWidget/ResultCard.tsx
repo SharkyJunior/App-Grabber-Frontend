@@ -94,12 +94,12 @@ export function ResultCard({
             </Button>
           </Link>
 
-          <Button
+          {/*<Button
             onClick={handleCompare}
             className="border border-accent bg-card px-6 py-3 text-base font-bold text-accent hover:bg-accent-subtle"
           >
             Сравнить
-          </Button>
+          </Button>*/}
 
           {variant === "favorite" && (
             <Button

@@ -8,6 +8,7 @@ import { SessionManager } from "@/components/widgets/SessionManager/SessionManag
 import { UserMenu } from "@/components/widgets/UserMenu/UserMenu";
 import { Suspense } from "react";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { ToastProvider } from "@/components/widgets/ToastProvider/ToastProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +28,7 @@ export const metadata: Metadata = {
 
 const NAV_ITEMS = [
   { href: "/", label: "Поиск" },
-  { href: "/compare", label: "Сравнение" },
+  //{ href: "/compare", label: "Сравнение" },
   { href: "/statuses", label: "Состояния" },
 ];
 
@@ -72,7 +73,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <UserMenu />
           </div>
         </header>
-        {children}
+        <ToastProvider>{children}</ToastProvider>
+
         <SessionManager />
 
         <footer></footer>

@@ -95,7 +95,7 @@ export function StoreDataTable({
         className,
       )}
     >
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-border-subtle pb-4">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 pb-4">
         <h2 className="text-2xl font-bold text-foreground">
           {isSingle ? `Данные из ${columns[0].label}` : "Сравнение магазинов"}
         </h2>
@@ -176,7 +176,7 @@ export function StoreDataTable({
         </dl>
 
         {/* hover-to-add strip on the right edge */}
-        {showAdd && canAdd && (
+        {/*{showAdd && canAdd && (
           <div className="pointer-events-none absolute inset-y-0 -right-6 flex w-10 items-center justify-center">
             <button
               type="button"
@@ -193,7 +193,7 @@ export function StoreDataTable({
               +
             </button>
           </div>
-        )}
+        )}*/}
       </div>
     </section>
   );
