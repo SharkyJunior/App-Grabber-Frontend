@@ -68,7 +68,7 @@ type AppHeaderProps = {
   package_name: string;
   letter: string;
   iconUrl?: string | null;
-  availableStore?: string;
+  availableStores?: string[];
   onSave?: () => void;
   onExportJson?: () => void;
   onCompare?: () => void;
@@ -82,10 +82,8 @@ export function AppHeader({
   package_name,
   letter,
   iconUrl = null,
-  availableStore,
+  availableStores = [],
   onExportJson,
-  onCompare,
-  compareLabel = "Посмотреть в разных магазинах",
   className,
 }: AppHeaderProps) {
   useCopyAnimationStyles();
@@ -130,12 +128,17 @@ export function AppHeader({
             {package_name}
           </span>
           <CopyButton value={package_name} />
-          {availableStore && (
-            <span className="inline-flex items-center gap-2 rounded-full border border-success px-3 py-1 text-sm font-medium text-success">
-              <span className="h-2 w-2 rounded-full bg-success" />
-              {availableStore}
-            </span>
-          )}
+          {availableStores.map((store) => {
+            return (
+              <span
+                key={store}
+                className="inline-flex items-center gap-2 rounded-full border border-success px-3 py-1 text-sm font-medium text-success"
+              >
+                <span className="h-2 w-2 rounded-full bg-success" />
+                {store}
+              </span>
+            );
+          })}
         </div>
       </div>
 

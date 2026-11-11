@@ -54,7 +54,7 @@ export function AppPageClient({ packageName }: Props) {
             `/api/apps/${store}/${encodeURIComponent(packageName)}`,
             { cache: "no-store", signal: controller.signal },
           );
-          if (res.status === 404) return null;
+          if (res.status === 404 || res.status === 500) return null;
           if (!res.ok) throw new Error(`apps: ${res.status}`);
           const data = (await res.json()) as App;
           return { store, data };
@@ -149,7 +149,7 @@ export function AppPageClient({ packageName }: Props) {
         package_name={primary.data.package_name}
         letter={primary.data.name.charAt(0).toUpperCase()}
         iconUrl={primary.data.icon_url}
-        availableStore={STORE_LABELS[primary.store]}
+        availableStores={apps.map((app) => STORE_LABELS[app.store])}
       />
 
       <div className="mt-8">
