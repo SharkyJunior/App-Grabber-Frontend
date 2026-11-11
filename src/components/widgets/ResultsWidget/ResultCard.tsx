@@ -7,7 +7,6 @@ import Link from "next/link";
 
 type ResultCardProps = {
   app: App;
-  onCompare?: (app: App) => void;
   className?: string;
   variant?: "search" | "favorite";
   onRemoveFromFavs?: (packageName: string) => void;
@@ -15,16 +14,10 @@ type ResultCardProps = {
 
 export function ResultCard({
   app,
-  onCompare,
   className,
   variant = "search",
   onRemoveFromFavs,
 }: ResultCardProps) {
-  const handleCompare = () => {
-    onCompare?.(app);
-    pushCurrentHistory();
-  };
-
   const handleRemoveFromFavs = () => {
     onRemoveFromFavs?.(app.package_name);
     pushCurrentHistory();
@@ -93,13 +86,6 @@ export function ResultCard({
               Открыть
             </Button>
           </Link>
-
-          {/*<Button
-            onClick={handleCompare}
-            className="border border-accent bg-card px-6 py-3 text-base font-bold text-accent hover:bg-accent-subtle"
-          >
-            Сравнить
-          </Button>*/}
 
           {variant === "favorite" && (
             <Button
