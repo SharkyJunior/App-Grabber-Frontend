@@ -133,6 +133,21 @@ export function AppPageClient({ packageName }: Props) {
   // setResult was called with the success branch → apps.length > 0.
   const primary = apps[0];
 
+  const handleExportJson = () => {
+    const jsonString = JSON.stringify(apps, null, 2);
+    const blob = new Blob([jsonString], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${primary.data.package_name}_data.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <main className="mx-auto w-full max-w-6xl px-16 py-8">
       <div
@@ -150,6 +165,7 @@ export function AppPageClient({ packageName }: Props) {
         letter={primary.data.name.charAt(0).toUpperCase()}
         iconUrl={primary.data.icon_url}
         availableStores={apps.map((app) => STORE_LABELS[app.store])}
+        onExportJson={handleExportJson}
       />
 
       <div className="mt-8">
