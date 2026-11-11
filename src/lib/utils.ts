@@ -44,6 +44,25 @@ export function formatRussianRelative(dateString: string): string {
   });
 }
 
+export function isLink(text: string) {
+  const trimmed = text.trim();
+
+  // 1. Catch anything starting with a protocol (http, https, ftp, etc.)
+  if (/^[a-z][a-z0-9+.-]*:\/\//i.test(trimmed)) return true;
+
+  // 2. Catch domain names without protocols (e.g., play.google.com)
+  // This looks for a dot followed by 2+ letters, optionally with a path
+  if (/^([a-z0-9-]+\.)+[a-z]{2,}(\/.*)?$/i.test(trimmed)) return true;
+
+  // 3. Fallback: try the URL constructor (catches IP addresses, etc.)
+  try {
+    new URL(trimmed);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function pushCurrentHistory() {
   if (typeof window !== "undefined") {
     window.history.pushState(null, "", window.location.href);

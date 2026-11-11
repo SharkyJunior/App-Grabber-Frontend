@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { cn, isValidPackageName } from "@/lib/utils";
+import { cn, isLink, isValidPackageName } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { TagSelect } from "@/components/ui/TagSelect";
@@ -37,7 +37,8 @@ export default function SearchWidget({
     if (!q) return;
 
     setError(null);
-    appendToHistory(q);
+
+    if (!isLink(q)) appendToHistory(q);
 
     if (isPackage) {
       const res = await fetch(`/api/apps/${encodeURIComponent(q)}`);
@@ -54,7 +55,6 @@ export default function SearchWidget({
     }
 
     runSearch(q);
-    
   }
 
   function handleQueryChange(value: string) {

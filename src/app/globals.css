@@ -126,6 +126,9 @@
     --color-accent-subtle: var(--accent-subtle);
 
     --color-error: var(--error);
+    --color-error-subtle: var(--error-subtle);
+    --color-error-border: var(--error-border);
+
     --color-success: var(--success);
     --color-warning: var(--warning);
     --color-info: var(--info);

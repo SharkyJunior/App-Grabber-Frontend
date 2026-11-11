@@ -22,6 +22,7 @@ type AppFromStore = {
 type Result = {
   packageName: string;
   apps: AppFromStore[];
+  notFoundStores: StoreKind[];
   notFound: boolean;
   error: string | null;
 };
@@ -38,6 +39,7 @@ export function AppPageClient({ packageName }: Props) {
   const isCurrent = result?.packageName === packageName;
   const loading = !isCurrent;
   const apps = isCurrent ? result!.apps : [];
+  const notFoundStores = isCurrent ? result!.notFoundStores : [];
   const notFound = isCurrent ? result!.notFound : false;
   const error = isCurrent ? result!.error : null;
 
@@ -54,7 +56,9 @@ export function AppPageClient({ packageName }: Props) {
             `/api/apps/${store}/${encodeURIComponent(packageName)}`,
             { cache: "no-store", signal: controller.signal },
           );
-          if (res.status === 404 || res.status === 500) return null;
+          if (res.status === 404 || res.status === 500) {
+            return { store, data: null };
+          }
           if (!res.ok) throw new Error(`apps: ${res.status}`);
           const data = (await res.json()) as App;
           return { store, data };
@@ -62,24 +66,28 @@ export function AppPageClient({ packageName }: Props) {
       );
 
       if (cancelled) return;
+      const found: AppFromStore[] = [];
+      const missing: StoreKind[] = [];
+      const failures: PromiseRejectedResult[] = [];
 
-      const found = results
-        .filter(
-          (r): r is PromiseFulfilledResult<AppFromStore | null> =>
-            r.status === "fulfilled",
-        )
-        .map((r) => r.value)
-        .filter((v): v is AppFromStore => v !== null);
+      // Iterate through results to build the arrays
+      results.forEach((r) => {
+        if (r.status === "rejected") {
+          failures.push(r);
+        } else if (r.value.data === null) {
+          missing.push(r.value.store);
+        } else {
+          found.push({ store: r.value.store, data: r.value.data });
+        }
+      });
 
-      const failures = results.filter(
-        (r): r is PromiseRejectedResult => r.status === "rejected",
-      );
-
+      // If there are network failures, show the error
       if (failures.length > 0) {
         const reason = failures[0].reason;
         setResult({
           packageName,
           apps: [],
+          notFoundStores: [],
           notFound: false,
           error:
             reason instanceof Error && reason.message
@@ -89,12 +97,26 @@ export function AppPageClient({ packageName }: Props) {
         return;
       }
 
+      // If NO stores have the app, mark as completely not found
       if (found.length === 0) {
-        setResult({ packageName, apps: [], notFound: true, error: null });
+        setResult({
+          packageName,
+          apps: [],
+          notFoundStores: missing,
+          notFound: true,
+          error: null,
+        });
         return;
       }
 
-      setResult({ packageName, apps: found, notFound: false, error: null });
+      // Success: we found it in at least one store
+      setResult({
+        packageName,
+        apps: found,
+        notFoundStores: missing,
+        notFound: false,
+        error: null,
+      });
     }
 
     load();
@@ -148,6 +170,8 @@ export function AppPageClient({ packageName }: Props) {
     URL.revokeObjectURL(url);
   };
 
+  const availableStores = apps.map((app) => STORE_LABELS[app.store]);
+
   return (
     <main className="mx-auto w-full max-w-6xl px-16 py-8">
       <div
@@ -164,7 +188,8 @@ export function AppPageClient({ packageName }: Props) {
         package_name={primary.data.package_name}
         letter={primary.data.name.charAt(0).toUpperCase()}
         iconUrl={primary.data.icon_url}
-        availableStores={apps.map((app) => STORE_LABELS[app.store])}
+        availableStores={availableStores}
+        notFoundStores={notFoundStores.map((s) => STORE_LABELS[s])}
         onExportJson={handleExportJson}
       />
 

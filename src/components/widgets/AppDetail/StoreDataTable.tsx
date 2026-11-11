@@ -161,7 +161,7 @@ export function StoreDataTable({
 
       <div className="relative">
         <dl
-          className="grid gap-x-8"
+          className="grid"
           style={{
             gridTemplateColumns: `minmax(8rem, max-content) repeat(${columns.length}, minmax(0, 1fr))`,
           }}
@@ -189,7 +189,7 @@ export function StoreDataTable({
                     type="button"
                     onClick={() => onRemove(index)}
                     aria-label={`Убрать колонку ${column.label}`}
-                    className="absolute -right-3 -top-1 flex h-6 w-6 items-center justify-center rounded-full text-muted-text transition-colors hover:cursor-pointer hover:bg-surface hover:text-foreground"
+                    className="absolute right-3 -top-1 flex h-6 w-6 items-center justify-center rounded-full text-muted-text transition-colors hover:cursor-pointer hover:bg-surface hover:text-foreground"
                   >
                     ×
                   </button>
@@ -206,20 +206,20 @@ export function StoreDataTable({
               <Fragment key={field.key}>
                 <dt
                   className={cn(
-                    "border-b border-border-subtle py-4 pr-4 text-base text-muted-text",
-                    showRed &&
-                      "border-b-error-border bg-error-subtle text-error z-100",
+                    "relative py-4 pr-8 text-base text-muted-text rounded-tl-2xl rounded-bl-2xl",
+                    showRed && "bg-error-subtle text-error",
                   )}
                 >
-                  {field.label}
+                  <p className="px-4">{field.label}</p>
                 </dt>
-                {columns.map((column) => (
+                {columns.map((column, index) => (
                   <dd
                     key={column.kind}
                     className={cn(
-                      "min-w-0 wrap-break-word border-b border-border-subtle py-4 text-base text-foreground",
-                      showRed &&
-                        "border-b-error-border bg-error-subtle text-error z-100",
+                      "relative min-w-0 wrap-break-word py-4",
+                      index === columns.length - 1 &&
+                        "rounded-tr-2xl rounded-br-2xl",
+                      showRed && "bg-error-subtle text-error",
                     )}
                   >
                     {field.render(column.app)}

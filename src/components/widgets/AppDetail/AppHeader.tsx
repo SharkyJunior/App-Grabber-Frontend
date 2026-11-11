@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import Image from "next/image";
 import { FavoriteButton } from "./FavoriteButton";
+import { Tooltip } from "@/components/ui/Tooltip";
+import { CodeIcon } from "@/components/icons";
 
 const copyPopupStyles = `
   @keyframes copyPopupAppear {
@@ -69,6 +71,7 @@ type AppHeaderProps = {
   letter: string;
   iconUrl?: string | null;
   availableStores?: string[];
+  notFoundStores?: string[];
   onSave?: () => void;
   onExportJson?: () => void;
   onCompare?: () => void;
@@ -83,6 +86,7 @@ export function AppHeader({
   letter,
   iconUrl = null,
   availableStores = [],
+  notFoundStores = [],
   onExportJson,
   className,
 }: AppHeaderProps) {
@@ -139,14 +143,25 @@ export function AppHeader({
               </span>
             );
           })}
+          {notFoundStores.map((store) => {
+            return (
+              <Tooltip key={store} content="Не найдено в этом магазине">
+                <span className="inline-flex items-center gap-2 rounded-full border border-border-strong px-3 py-1 text-sm font-medium text-muted-text">
+                  <span className="h-2 w-2 rounded-full bg-muted-text" />
+                  {store}
+                </span>
+              </Tooltip>
+            );
+          })}
         </div>
       </div>
 
       <div className="flex shrink-0 items-center gap-3">
         <Button
           onClick={onExportJson}
-          className="border-2 border-accent bg-card px-6 py-3 text-base font-bold text-accent hover:bg-accent-subtle"
+          className="border border-strong bg-card px-4 py-2 text-base font-medium text-accent hover:bg-accent-subtle gap-2"
         >
+          <CodeIcon />
           Экспорт JSON
         </Button>
         {/*<Button
