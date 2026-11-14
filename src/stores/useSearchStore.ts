@@ -2,6 +2,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import type { AppSearchResult } from "@/lib/api/apps";
+import { authFetch } from "@/lib/api/authFetch";
 
 export const STORES = ["Google Play", "RuStore"] as const;
 export type StoreName = (typeof STORES)[number];
@@ -21,6 +22,7 @@ interface SearchState {
   setQuery: (q: string) => void;
   toggleStore: (store: StoreName) => void;
   appendToHistory: (q: string) => void;
+  clearHistory: () => void;
   reset: () => void;
 
   runSearch: (q: string) => Promise<void>;
@@ -61,6 +63,8 @@ export const useSearchStore = create<SearchState>()(
           return { queryHistory: [trimmed, ...deduped].slice(0, 13) };
         }),
 
+      clearHistory: () => set({ queryHistory: [] }),
+
       clearResults: () =>
         set({ searchResult: null, searchError: null, isSearching: false }),
 
@@ -76,7 +80,7 @@ export const useSearchStore = create<SearchState>()(
           // Add `stores` here when the backend supports filtering:
           // params.set("stores", get().selectedStores.join(","));
 
-          const res = await fetch(`/api/search?${params}`);
+          const res = await authFetch(`/api/search?${params}`);
 
           if (gen !== searchGeneration) return;
 

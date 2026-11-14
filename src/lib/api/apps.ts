@@ -1,4 +1,5 @@
-// lib/api/apps.ts
+import { API_BASE, readError } from "./client";
+
 export type App = {
   package_name: string;
   store_url: string;
@@ -15,27 +16,37 @@ export type AppSearchResult = {
   results: App[];
 };
 
-const API_BASE = process.env.API_BASE_URL ?? "http://localhost:8080";
-
-export async function getApp(packageName: string): Promise<App | null> {
+export async function getApp(
+  storeName: string,
+  packageName: string,
+  headers: HeadersInit = {},
+): Promise<App | null> {
+  console.log(
+    `fetching ${API_BASE}/api/apps/${encodeURIComponent(storeName)}/${encodeURIComponent(packageName)}`,
+  );
   const res = await fetch(
-    `${API_BASE}/api/apps/${encodeURIComponent(packageName)}`,
-    { cache: "no-store" },
+    `${API_BASE}/api/apps/${encodeURIComponent(storeName)}/${encodeURIComponent(packageName)}`,
+    { cache: "no-store", headers },
   );
 
   if (res.status === 404) return null;
+  if (res.status === 401) throw await readError(res);
   if (!res.ok) {
     throw new Error(`Failed to fetch app ${packageName}: ${res.status}`);
   }
   return res.json() as Promise<App>;
 }
 
-export async function search(query: string): Promise<AppSearchResult | null> {
+export async function search(
+  query: string,
+  headers: HeadersInit = {},
+): Promise<AppSearchResult | null> {
   const res = await fetch(
     `${API_BASE}/api/search?q=${encodeURIComponent(query)}`,
-    { cache: "no-store" },
+    { cache: "no-store", headers },
   );
 
+  if (res.status === 401) throw await readError(res);
   if (res.status === 502) return null;
   if (!res.ok) {
     throw new Error(`Failed to search! query=${query}: ${res.status}`);

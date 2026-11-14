@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 export type PromptSelectProps = {
   title?: string;
   onSelect?: (prompt: string) => void;
+  onClearHistory?: () => void;
   prompts?: string[];
   className?: string;
 };
@@ -12,6 +13,7 @@ export function PromptSelect({
   onSelect,
   prompts,
   className,
+  onClearHistory,
 }: PromptSelectProps) {
   return (
     <div className={cn("flex flex-wrap gap-4 mb-4 px-1", className)}>
@@ -19,7 +21,7 @@ export function PromptSelect({
       {prompts?.map((prompt) => {
         return (
           <button
-            className="bg-white p-2 px-4 rounded-2xl border-gray-200 border hover:bg-gray-200 cursor-pointer transition-colors duration-200"
+            className="bg-card p-2 px-4 rounded-2xl border-border border text-foreground hover:bg-surface-hover cursor-pointer transition-colors duration-200"
             key={prompt}
             type="button"
             onClick={() => onSelect?.(prompt)}
@@ -28,6 +30,12 @@ export function PromptSelect({
           </button>
         );
       })}
+      <p
+        className="text-accent underline cursor-pointer hover:text-accent-hover self-center mx-2"
+        onClick={onClearHistory}
+      >
+        Очистить историю
+      </p>
     </div>
   );
 }

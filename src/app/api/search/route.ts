@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { search } from "@/lib/api/apps";
+import { ApiError } from "@/lib/api/client";
+import { errorResponse, upstreamHeaders } from "@/lib/api/route";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -7,12 +9,17 @@ export async function GET(req: Request) {
 
   if (!q) return NextResponse.json({ query: "", results: [] });
 
-  const data = await search(q);
-  if (!data) {
-    return NextResponse.json(
-      { error: "upstream unavailable" },
-      { status: 502 },
-    );
+  try {
+    const data = await search(q, upstreamHeaders(req));
+    if (!data) {
+      return NextResponse.json(
+        { error: "upstream unavailable" },
+        { status: 502 },
+      );
+    }
+    return NextResponse.json(data);
+  } catch (e) {
+    if (e instanceof ApiError) return errorResponse(e);
+    throw e;
   }
-  return NextResponse.json(data);
 }

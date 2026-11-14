@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { cn, isValidPackageName } from "@/lib/utils";
+import { cn, isLink, isValidPackageName } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { TagSelect } from "@/components/ui/TagSelect";
@@ -12,7 +12,7 @@ import { useSearchStore } from "@/stores/useSearchStore";
 import { Spinner } from "@/components/ui/Spinner";
 
 export default function SearchWidget({
-  placeholder = "com.example.app или название приложения",
+  placeholder = "com.example.app, название приложения или ссылка на Google Play / RuStore",
   className,
 }: SearchWidgetProps) {
   const router = useRouter();
@@ -22,7 +22,6 @@ export default function SearchWidget({
     toggleStore,
     setQuery,
     appendToHistory,
-    clearResults,
     runSearch,
     isSearching,
   } = useSearchStore();
@@ -38,7 +37,8 @@ export default function SearchWidget({
     if (!q) return;
 
     setError(null);
-    appendToHistory(q);
+
+    if (!isLink(q)) appendToHistory(q);
 
     if (isPackage) {
       const res = await fetch(`/api/apps/${encodeURIComponent(q)}`);
@@ -55,7 +55,6 @@ export default function SearchWidget({
     }
 
     runSearch(q);
-    
   }
 
   function handleQueryChange(value: string) {
@@ -67,7 +66,7 @@ export default function SearchWidget({
   return (
     <section
       className={cn(
-        "flex flex-col gap-4 rounded-xl border border-[#DCDFD8] bg-white p-6 shadow-sm",
+        "flex flex-col gap-4 rounded-xl border border-border bg-card p-6 shadow-sm",
         className,
       )}
     >
@@ -90,7 +89,7 @@ export default function SearchWidget({
       {error !== null && <Error text={error} />}
 
       <div className="flex flex-row align-middle gap-4">
-        <p className="text-sm text-neutral-600 self-center">Искать в:</p>
+        <p className="text-sm text-muted-text self-center">Искать в:</p>
         <TagSelect
           options={["Google Play", "RuStore"]}
           selected={selectedStores}

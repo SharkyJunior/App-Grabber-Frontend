@@ -1,72 +1,256 @@
+"use client";
+
+import { Fragment, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import type { App } from "@/lib/api/apps";
+import { StoreTabs } from "./StoreTabs";
+import { StoreKind } from "./types";
 
 const MAX_RATING = 5;
 
+export type StoreColumn = {
+  kind: StoreKind;
+  label: string;
+  app: App;
+};
+
+type Field = {
+  key: keyof App;
+  label: string;
+  render: (app: App) => ReactNode;
+  ignoreComparison?: boolean;
+};
+
+const FIELDS: Field[] = [
+  { key: "name", label: "Название", render: (app) => app.name },
+  { key: "developer", label: "Разработчик", render: (app) => app.developer },
+  { key: "category", label: "Категория", render: (app) => app.category },
+  { key: "age_rating", label: "Возраст", render: (app) => app.age_rating },
+  {
+    key: "rating",
+    label: "Оценка",
+    render: (app) => (
+      <span className="inline-flex items-center gap-2">
+        <StarIcon className="h-4 w-4 text-rating" />
+        {app.rating.toString().replace(".", ",")} из {MAX_RATING}
+      </span>
+    ),
+  },
+  {
+    key: "package_name",
+    label: "Package name",
+    render: (app) => <span className="font-mono">{app.package_name}</span>,
+  },
+  {
+    key: "store_url",
+    label: "Ссылка",
+    render: (app) => (
+      <a
+        href={app.store_url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="break-all text-accent hover:underline"
+      >
+        {app.store_url}
+      </a>
+    ),
+    ignoreComparison: true,
+  },
+  {
+    key: "icon_url",
+    label: "Иконка",
+    render: (app) => (
+      <span className="break-all font-mono text-sm text-muted-text">
+        {app.icon_url}
+      </span>
+    ),
+    ignoreComparison: true,
+  },
+];
+
 export function StoreDataTable({
-  data,
+  columns,
+  allStores,
+  canAdd,
+  onAdd,
+  onChange,
+  onRemove,
   className,
 }: {
-  data: App;
+  columns: StoreColumn[];
+  allStores: { kind: StoreKind; label: string }[];
+  canAdd: boolean;
+  onAdd: () => void;
+  onChange: (index: number, kind: StoreKind) => void;
+  onRemove: (index: number) => void;
   className?: string;
 }) {
+  const [highlightDiffs, setHighlightDiffs] = useState<boolean>(false);
+  if (columns.length === 0) return null;
+
+  const isSingle = columns.length === 1;
+  const showAdd = allStores.length > 1;
+  const tabs = allStores.map((s) => ({ value: s.kind, label: s.label }));
+
+  const isDiscrepant = (field: Field) => {
+    if (!highlightDiffs || isSingle || field.ignoreComparison) return;
+    const values = columns.map((col) => String(col.app[field.key] ?? ""));
+    return new Set(values).size > 1;
+  };
+
   return (
     <section
       className={cn(
-        "rounded-2xl border border-[#DCDFD8] bg-white p-8",
+        "group relative rounded-2xl border border-border bg-card p-8",
         className,
       )}
     >
-      <h2 className="mb-6 border-b border-[#ECEEEA] pb-4 text-2xl font-bold text-black">
-        Данные из магазина
-      </h2>
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 pb-4">
+        <h2 className="text-2xl font-bold text-foreground">
+          {isSingle ? `Данные из ${columns[0].label}` : "Сравнение магазинов"}
+        </h2>
 
-      <dl className="divide-y divide-[#ECEEEA]">
-        <Row label="Название">{data.name}</Row>
-        <Row label="Разработчик">{data.developer}</Row>
-        <Row label="Категория">{data.category}</Row>
-        <Row label="Возраст">{data.age_rating}</Row>
-        <Row label="Оценка">
-          <span className="inline-flex items-center gap-2">
-            <StarIcon className="h-4 w-4 text-amber-500" />
-            {data.rating.toString().replace(".", ",")} из {MAX_RATING}
-          </span>
-        </Row>
-        <Row label="Package name">
-          <span className="font-mono">{data.package_name}</span>
-        </Row>
-        <Row label="Ссылка">
-          <a
-            href={data.store_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="break-all text-blue-600 hover:underline"
-          >
-            {data.store_url}
-          </a>
-        </Row>
-        <Row label="Иконка">
-          <span className="break-all font-mono text-sm text-neutral-700">
-            {data.icon_url}
-          </span>
-        </Row>
-      </dl>
+        <div className="flex items-center gap-3">
+          {!isSingle && (
+            <button
+              type="button"
+              onClick={() => setHighlightDiffs(!highlightDiffs)}
+              className={cn(
+                "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors",
+                highlightDiffs
+                  ? "border-error-border bg-error-subtle text-error"
+                  : "border-border text-muted-text hover:cursor-pointer hover:border-accent hover:text-foreground",
+              )}
+            >
+              {/* Toggle Switch Graphic */}
+              <div
+                className={cn(
+                  "relative h-4 w-7 rounded-full transition-colors",
+                  highlightDiffs ? "bg-error" : "bg-border-strong",
+                )}
+              >
+                <div
+                  className={cn(
+                    "absolute left-0.5 top-0.5 h-3 w-3 rounded-full bg-white transition-transform",
+                    highlightDiffs && "translate-x-3",
+                  )}
+                />
+              </div>
+              Подсветка различий
+            </button>
+          )}
+
+          {showAdd && (
+            <button
+              type="button"
+              onClick={onAdd}
+              disabled={!canAdd}
+              className={cn(
+                "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors",
+                canAdd
+                  ? "border-border text-foreground hover:cursor-pointer hover:border-accent hover:text-accent"
+                  : "cursor-not-allowed border-border-subtle text-muted-text opacity-50",
+              )}
+            >
+              <span className="text-base leading-none">+</span>
+              Добавить колонку
+            </button>
+          )}
+        </div>
+      </div>
+
+      <div className="relative">
+        <dl
+          className="grid"
+          style={{
+            gridTemplateColumns: `minmax(8rem, max-content) repeat(${columns.length}, minmax(0, 1fr))`,
+          }}
+        >
+          {/* header row (tabs per column) — only in comparison mode */}
+          {!isSingle && (
+            <>
+              <div
+                aria-hidden="true"
+                className="border-b border-border-subtle pb-2"
+              />
+              {columns.map((column, index) => (
+                <div
+                  key={column.kind}
+                  className="relative min-w-0 border-b border-border-subtle"
+                >
+                  <StoreTabs
+                    stores={tabs}
+                    active={column.kind}
+                    onChange={(kind) => onChange(index, kind)}
+                    size="compact"
+                    className="border-b-0"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => onRemove(index)}
+                    aria-label={`Убрать колонку ${column.label}`}
+                    className="absolute right-3 -top-1 flex h-6 w-6 items-center justify-center rounded-full text-muted-text transition-colors hover:cursor-pointer hover:bg-surface hover:text-foreground"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </>
+          )}
+
+          {/* data rows */}
+          {FIELDS.map((field) => {
+            const showRed = isDiscrepant(field);
+
+            return (
+              <Fragment key={field.key}>
+                <dt
+                  className={cn(
+                    "relative py-4 pr-8 text-base text-muted-text rounded-tl-2xl rounded-bl-2xl",
+                    showRed && "bg-error-subtle text-error",
+                  )}
+                >
+                  <p className="px-4">{field.label}</p>
+                </dt>
+                {columns.map((column, index) => (
+                  <dd
+                    key={column.kind}
+                    className={cn(
+                      "relative min-w-0 wrap-break-word py-4",
+                      index === columns.length - 1 &&
+                        "rounded-tr-2xl rounded-br-2xl",
+                      showRed && "bg-error-subtle text-error",
+                    )}
+                  >
+                    {field.render(column.app)}
+                  </dd>
+                ))}
+              </Fragment>
+            );
+          })}
+        </dl>
+
+        {/* hover-to-add strip on the right edge */}
+        {/*{showAdd && canAdd && (
+          <div className="pointer-events-none absolute inset-y-0 -right-6 flex w-10 items-center justify-center">
+            <button
+              type="button"
+              onClick={onAdd}
+              aria-label="Добавить колонку"
+              className={cn(
+                "pointer-events-auto flex h-24 w-8 items-center justify-center rounded-full border border-dashed border-border text-lg text-muted-text",
+                "invisible opacity-0 transition-opacity duration-200",
+                "group-hover:visible group-hover:opacity-100",
+                "hover:border-accent hover:text-accent hover:cursor-pointer",
+                "focus-visible:visible focus-visible:opacity-100",
+              )}
+            >
+              +
+            </button>
+          </div>
+        )}*/}
+      </div>
     </section>
-  );
-}
-
-function Row({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="grid grid-cols-3 gap-4 py-4">
-      <dt className="text-base text-neutral-500">{label}</dt>
-      <dd className="col-span-2 text-base text-black">{children}</dd>
-    </div>
   );
 }
 
