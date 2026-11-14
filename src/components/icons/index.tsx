@@ -85,9 +85,9 @@ export function CodeIcon(props: React.SVGProps<SVGSVGElement>) {
       {...props}
     >
       <path
-        fill-rule="evenodd"
+        fillRule="evenodd"
         d="M7.136 6.266a.9.9 0 0 1 0 1.273L2.674 12l4.462 4.461a.9.9 0 0 1-1.273 1.273L.764 12.637a.9.9 0 0 1 0-1.273l5.099-5.098a.9.9 0 0 1 1.273 0Zm9.73 0a.9.9 0 0 0 0 1.273L21.328 12l-4.462 4.461a.9.9 0 1 0 1.272 1.273l5.099-5.098a.9.9 0 0 0 0-1.273l-5.099-5.098a.9.9 0 0 0-1.272 0ZM14.79 3.035a.9.9 0 0 1 .592 1.127L10.34 20.384a.9.9 0 0 1-1.719-.535l5.042-16.221a.9.9 0 0 1 1.126-.593Z"
-        clip-rule="evenodd"
+        clipRule="evenodd"
       />
     </svg>
   );

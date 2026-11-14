@@ -12,7 +12,7 @@ import { useSearchStore } from "@/stores/useSearchStore";
 import { Spinner } from "@/components/ui/Spinner";
 
 export default function SearchWidget({
-  placeholder = "com.example.app или название приложения",
+  placeholder = "com.example.app, название приложения или ссылка на Google Play / RuStore",
   className,
 }: SearchWidgetProps) {
   const router = useRouter();
