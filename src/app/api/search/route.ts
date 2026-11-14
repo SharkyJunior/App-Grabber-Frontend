@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { search } from "@/lib/api/apps";
 import { ApiError } from "@/lib/api/client";
-import { errorResponse } from "@/lib/api/route";
+import { errorResponse, upstreamHeaders } from "@/lib/api/route";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -10,7 +10,7 @@ export async function GET(req: Request) {
   if (!q) return NextResponse.json({ query: "", results: [] });
 
   try {
-    const data = await search(q, req.headers.get("authorization"));
+    const data = await search(q, upstreamHeaders(req));
     if (!data) {
       return NextResponse.json(
         { error: "upstream unavailable" },

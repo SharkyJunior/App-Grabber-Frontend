@@ -16,7 +16,10 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
-    remotePatterns: [new URL("https://play-lh.googleusercontent.com/**")],
+    remotePatterns: [
+      new URL("https://play-lh.googleusercontent.com/**"),
+      new URL("https://static.rustore.ru/**"),
+    ],
   },
   experimental: {
     agentFeedback: true,

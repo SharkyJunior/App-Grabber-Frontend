@@ -7,7 +7,7 @@ import type { LoginResponse, RegisterInput, User } from "@/lib/api/auth";
 export type AuthStatus = "idle" | "anonymous" | "authenticated";
 
 interface AuthState {
-  // persisted (sessionStorage)
+  // persisted (localStorage); бэкенд авторизует по cookie, поле не обязательно.
   token: string | null;
 
   // ephemeral
@@ -18,9 +18,9 @@ interface AuthState {
   // actions
   register: (input: RegisterInput) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   restore: () => Promise<void>;
-  handleUnauthorized: (expiredToken: string) => void;
+  handleUnauthorized: (expiredToken?: string | null) => void;
   dismissSessionExpired: () => void;
 }
 
@@ -33,6 +33,7 @@ async function postJson<T>(url: string, body: unknown): Promise<T> {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
+      credentials: "include",
     });
   } catch {
     throw new Error("Ошибка сети");
@@ -71,49 +72,53 @@ export const useAuthStore = create<AuthState>()(
           password,
         });
         set({
-          token: data.access_token,
+          token: data.access_token ?? null,
           user: data.user,
           status: "authenticated",
           sessionExpired: false,
         });
       },
 
-      logout: () =>
+      logout: async () => {
+        try {
+          await fetch("/api/auth/logout", {
+            method: "POST",
+            credentials: "include",
+          });
+        } catch {
+          // Сеть недоступна — всё равно очищаем локальное состояние.
+        }
         set({
           token: null,
           user: null,
           status: "anonymous",
           sessionExpired: false,
-        }),
+        });
+      },
 
       restore: async () => {
-        const { token, handleUnauthorized } = get();
-        if (!token) {
-          set({ user: null, status: "anonymous" });
-          return;
-        }
-
         try {
           const res = await fetch("/api/auth/me", {
-            headers: { Authorization: `Bearer ${token}` },
+            credentials: "include",
+            cache: "no-store",
           });
 
+          // Нет cookie/сессия истекла — это обычный анонимный посетитель.
           if (res.status === 401) {
-            handleUnauthorized(token);
+            set({ token: null, user: null, status: "anonymous" });
             return;
           }
           if (!res.ok) throw new Error("me failed");
 
           const user = (await res.json()) as User;
-          if (get().token !== token) return;
           set({ user, status: "authenticated" });
         } catch {
-          if (get().token === token) set({ user: null, status: "anonymous" });
+          set({ user: null, status: "anonymous" });
         }
       },
 
       handleUnauthorized: (expiredToken) => {
-        if (get().token !== expiredToken) return;
+        if (expiredToken && get().token !== expiredToken) return;
         set({
           token: null,
           user: null,

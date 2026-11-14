@@ -30,9 +30,20 @@
 
     /* Semantic status */
     --error: #b3261e;
+    --error-subtle: #fceae9;
+    --error-border: #eab3b0;
+
     --success: #2e7d32;
+    --success-subtle: #eaf5ea;
+    --success-border: #bce0bc;
+
     --warning: #b26a00;
+    --warning-subtle: #fdf3e3;
+    --warning-border: #f0d5a3;
+
     --info: #1f4fd8;
+    --info-subtle: #e6ecfc;
+    --info-border: #b8caf5;
 
     /* Decorative */
     --rating: #d97706;
@@ -70,9 +81,20 @@
 
     /* Semantic status */
     --error: #f2837d;
+    --error-subtle: #301c1b;
+    --error-border: #5e3431;
+
     --success: #81c784;
+    --success-subtle: #1f2e20;
+    --success-border: #365538;
+
     --warning: #ffb74d;
+    --warning-subtle: #302517;
+    --warning-border: #634d2c;
+
     --info: #7a9bff;
+    --info-subtle: #1e2945;
+    --info-border: #3a4f85;
 
     /* Decorative */
     --rating: #fbbf24;
@@ -104,6 +126,9 @@
     --color-accent-subtle: var(--accent-subtle);
 
     --color-error: var(--error);
+    --color-error-subtle: var(--error-subtle);
+    --color-error-border: var(--error-border);
+
     --color-success: var(--success);
     --color-warning: var(--warning);
     --color-info: var(--info);

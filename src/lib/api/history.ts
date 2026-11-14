@@ -16,7 +16,7 @@ export type HistoryPage = {
 };
 
 export async function fetchHistory(
-  token: string,
+  headers: HeadersInit,
   params: { limit?: number; offset?: number } = {},
 ): Promise<Response> {
   const q = new URLSearchParams();
@@ -25,10 +25,7 @@ export async function fetchHistory(
   const qs = q.toString();
 
   return fetch(`${API_BASE}/api/history${qs ? `?${qs}` : ""}`, {
-    headers: {
-      accept: "application/json",
-      authorization: `Bearer ${token}`,
-    },
+    headers,
     cache: "no-store",
   });
 }

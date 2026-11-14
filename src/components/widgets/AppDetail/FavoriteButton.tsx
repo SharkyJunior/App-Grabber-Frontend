@@ -7,6 +7,7 @@ import { ACTIVE_STORE } from "@/lib/constants";
 import { Button } from "@/components/ui/Button";
 import { FavoriteOffIcon, FavoriteOnIcon } from "@/components/icons";
 import { useAuthStore } from "@/stores/useAuthStore";
+import { showToast } from "../ToastProvider/toast-manager";
 
 type Props = { packageName: string };
 
@@ -40,6 +41,7 @@ export function FavoriteButton({ packageName }: Props) {
   const toggle = async () => {
     if (status !== "authenticated") {
       router.push(`/login?next=${encodeURIComponent(pathname)}`);
+      showToast("Авторизуйтесь для добавления в избранное", "info");
       return;
     }
     if (isFavorite == null || busy) return;

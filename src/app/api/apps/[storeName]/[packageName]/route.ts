@@ -1,18 +1,19 @@
 import { NextResponse } from "next/server";
 import { getApp } from "@/lib/api/apps";
 import { ApiError } from "@/lib/api/client";
-import { errorResponse } from "@/lib/api/route";
+import { errorResponse, upstreamHeaders } from "@/lib/api/route";
 
 export async function GET(
   req: Request,
-  { params }: { params: Promise<{ packageName: string }> },
+  { params }: { params: Promise<{ storeName: string; packageName: string }> },
 ) {
-  const { packageName } = await params;
+  const { storeName, packageName } = await params;
 
   try {
     const app = await getApp(
+      decodeURIComponent(storeName),
       decodeURIComponent(packageName),
-      req.headers.get("authorization"),
+      upstreamHeaders(req),
     );
 
     if (!app) {

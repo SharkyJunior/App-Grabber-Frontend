@@ -3,9 +3,24 @@
 import { cn } from "@/lib/utils";
 import { useSearchStore } from "@/stores/useSearchStore";
 import { ResultCard } from "./ResultCard";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export function ResultsWidget({ className }: { className?: string }) {
-  const { searchResult, isSearching, searchError } = useSearchStore();
+  const router = useRouter();
+  const { searchResult, isSearching, searchError, clearResults, setQuery } =
+    useSearchStore();
+
+  useEffect(() => {
+    if (!isSearching && !searchError && searchResult?.results.length === 1) {
+      router.push(`/apps/${searchResult.results[0].package_name}`);
+
+      setTimeout(() => {
+        clearResults();
+        setQuery("");
+      }, 100);
+    }
+  }, [searchResult, isSearching, searchError, clearResults, setQuery, router]);
 
   if (isSearching) {
     return (
@@ -23,7 +38,7 @@ export function ResultsWidget({ className }: { className?: string }) {
     );
   }
 
-  if (!searchResult || searchResult?.results.length === 0)
+  if (!searchResult || searchResult.results.length === 0)
     return (
       <h3
         className={cn("p-5 px-10 gap-2 text-[20px] text-muted-text", className)}
@@ -31,6 +46,14 @@ export function ResultsWidget({ className }: { className?: string }) {
         Введите запрос и начните поиск. Здесь появятся результаты
       </h3>
     );
+
+  if (searchResult.results.length === 1) {
+    return (
+      <div className={cn("flex items-center justify-center py-16", className)}>
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <ul className={cn("flex flex-col gap-2", className)}>

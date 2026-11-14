@@ -1,4 +1,4 @@
-import { API_BASE, authHeader, readError } from "./client";
+import { API_BASE } from "./client";
 
 export type User = {
   id: string;
@@ -8,8 +8,8 @@ export type User = {
 };
 
 export type LoginResponse = {
-  access_token: string;
-  token_type: "Bearer";
+  // Бэкенд авторизует по HttpOnly-cookie; поле оставлено для совместимости.
+  access_token?: string;
   user: User;
 };
 
@@ -24,32 +24,47 @@ export type LoginInput = {
   password: string;
 };
 
-async function postJson<T>(path: string, body: unknown): Promise<T> {
-  const res = await fetch(`${API_BASE}${path}`, {
+async function postJson(
+  path: string,
+  body: unknown,
+  headers: HeadersInit = {},
+): Promise<Response> {
+  const requestHeaders = new Headers(headers);
+  requestHeaders.set("Content-Type", "application/json");
+
+  return fetch(`${API_BASE}${path}`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: requestHeaders,
     body: JSON.stringify(body),
     cache: "no-store",
   });
-
-  if (!res.ok) throw await readError(res);
-  return res.json() as Promise<T>;
 }
 
-export function register(input: RegisterInput): Promise<User> {
-  return postJson<User>("/api/auth/register", input);
+export function register(
+  input: RegisterInput,
+  headers: HeadersInit = {},
+): Promise<Response> {
+  return postJson("/api/auth/register", input, headers);
 }
 
-export function login(input: LoginInput): Promise<LoginResponse> {
-  return postJson<LoginResponse>("/api/auth/login", input);
+export function login(
+  input: LoginInput,
+  headers: HeadersInit = {},
+): Promise<Response> {
+  return postJson("/api/auth/login", input, headers);
 }
 
-export async function getMe(authorization: string | null): Promise<User> {
-  const res = await fetch(`${API_BASE}/api/auth/me`, {
-    headers: authHeader(authorization),
+export function logout(headers: HeadersInit = {}): Promise<Response> {
+  return fetch(`${API_BASE}/api/auth/logout`, {
+    method: "POST",
+    headers,
     cache: "no-store",
   });
+}
 
-  if (!res.ok) throw await readError(res);
-  return res.json() as Promise<User>;
+export function getMe(headers: HeadersInit = {}): Promise<Response> {
+  return fetch(`${API_BASE}/api/auth/me`, {
+    headers,
+    cache: "no-store",
+  });
 }

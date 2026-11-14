@@ -23,23 +23,20 @@ export type FavoritesPage = {
 };
 
 export async function fetchFavorites(
-  token: string,
+  headers: HeadersInit,
   params: { limit?: number; offset?: number } = {},
 ): Promise<Response> {
   const q = new URLSearchParams();
   if (params.limit != null) q.set("limit", String(params.limit));
   if (params.offset != null) q.set("offset", String(params.offset));
   return fetch(`${API_BASE}/api/favorites?${q}`, {
-    headers: {
-      accept: "application/json",
-      authorization: `Bearer ${token}`,
-    },
+    headers,
     cache: "no-store",
   });
 }
 
 export async function fetchAddFavorite(
-  token: string,
+  headers: HeadersInit,
   store: string,
   packageName: string,
 ): Promise<Response> {
@@ -47,14 +44,14 @@ export async function fetchAddFavorite(
     `${API_BASE}/api/favorites/${encodeURIComponent(store)}/${encodeURIComponent(packageName)}`,
     {
       method: "PUT",
-      headers: { accept: "application/json", authorization: `Bearer ${token}` },
+      headers,
       cache: "no-store",
     },
   );
 }
 
 export async function fetchRemoveFavorite(
-  token: string,
+  headers: HeadersInit,
   store: string,
   packageName: string,
 ): Promise<Response> {
@@ -62,7 +59,7 @@ export async function fetchRemoveFavorite(
     `${API_BASE}/api/favorites/${encodeURIComponent(store)}/${encodeURIComponent(packageName)}`,
     {
       method: "DELETE",
-      headers: { accept: "application/json", authorization: `Bearer ${token}` },
+      headers,
       cache: "no-store",
     },
   );
