@@ -20,7 +20,7 @@ Go to [this link](https://github.com/grishacake/CheckApp#запуск) and follo
 3. Run the frontend:
 
 ```bash
-cd ../App-Grabber-Frontend && npm run build && npm run start
+cd ../App-Grabber-Frontend && npm ci && npm run build && npm run start
 ```
 
 4. Access the service at `http://localhost:3000/`
